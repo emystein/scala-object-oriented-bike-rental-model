@@ -10,26 +10,19 @@ import org.scalatest.matchers.should.Matchers
 
 import scala.util.Random
 
-class BikeAnchorageTest extends AnyFunSuite with BeforeAndAfterEach with Matchers {
+class BikeAnchorageTest extends AnyFunSuite with TestObjects with BeforeAndAfterEach with Matchers {
   private var tokenRegistry: TokenRegistry = null
-  private var bikeTripCompleteChecker: TripCompletionRules = null
   private var trips: Trips = null
   private var station: BikeStation = null
   private var anchorage: BikeAnchorage = null
   private var reservedRentToken1: ReservedToken = null
-  private val user: User = new User("1", "Emiliano Menéndez")
-  private var bike1: Bike = null
-  private var bike2: Bike = null
 
   override protected def beforeEach(): Unit = {
     tokenRegistry = TokenRegistry(new TokenGenerator(new Random))
     reservedRentToken1 = tokenRegistry.reserveTokenForUser(user)
-    bikeTripCompleteChecker = TripCompletionRulesFactory.create
-    trips = new Trips(bikeTripCompleteChecker)
+    trips = new Trips(tripCompletionRules)
     station = new BikeStation(1, trips)
     anchorage = station.getFreeSpots.iterator.next
-    bike1 = new Bike("1")
-    bike2 = new Bike("2")
   }
 
   test("givenAnEmptyBikeAnchorageWhenAskForBikeThenItShouldReturnEmpty") {
@@ -42,6 +35,7 @@ class BikeAnchorageTest extends AnyFunSuite with BeforeAndAfterEach with Matcher
 
   test("givenAnEmptyBikeAnchorageWhenParkABikeThenTheAnchorageShouldBeLocked") {
     anchorage.parkBike(bike1)
+
     anchorage.isLocked shouldBe true
   }
 
@@ -51,6 +45,7 @@ class BikeAnchorageTest extends AnyFunSuite with BeforeAndAfterEach with Matcher
     anchorage.releaseBike(reservedRentToken1)
     val completedBikeTrip = anchorage.parkBike(bike1)
     val trip = trips.getCurrentTripForBike(bike1)
+
     completedBikeTrip.get shouldBe(trip.get.completionResult.get)
   }
 
@@ -58,13 +53,15 @@ class BikeAnchorageTest extends AnyFunSuite with BeforeAndAfterEach with Matcher
     anchorage.parkBike(bike1)
     anchorage.releaseBike(reservedRentToken1)
     val tripCompletionResult = anchorage.parkBike(bike1)
+
     tripCompletionResult shouldNot be(null)
     tripCompletionResult.get.rulesCheckResult.isInstanceOf[SuccessResult] shouldBe true
   }
 
   test("givenABikeAnchorageWithAParkedBikeWhenAskingTheAnchorageForTheBikeThenItShouldReturnTheParkedBike") {
     anchorage.parkBike(bike1)
-    anchorage.parkedBike.get shouldBe bike1
+
+    anchorage.parkedBike shouldBe Some(bike1)
   }
 
   test("givenABikeAnchorageWithAParkedBikeWhenTryingToParkAnotherBikeThenAnErrorShouldOccur") {
@@ -78,6 +75,7 @@ class BikeAnchorageTest extends AnyFunSuite with BeforeAndAfterEach with Matcher
   test("givenABikeAnchorageWithAParkedBikeWhenRetrieveTheBikeThenTheAnchorageShouldBeEmpty") {
     anchorage.parkBike(bike1)
     anchorage.releaseBike(reservedRentToken1)
+
     anchorage.parkedBike shouldBe None
   }
 
@@ -90,6 +88,7 @@ class BikeAnchorageTest extends AnyFunSuite with BeforeAndAfterEach with Matcher
   test("givenABikeAnchorageWithAParkedBikeWhenRetrieveTheBikeThenTheRetrieveBikeShouldBeTheParkedOne") {
     anchorage.parkBike(bike1)
     val retrievedBike = anchorage.releaseBike(reservedRentToken1)
+
     retrievedBike shouldBe bike1
   }
 
@@ -97,6 +96,7 @@ class BikeAnchorageTest extends AnyFunSuite with BeforeAndAfterEach with Matcher
     anchorage.parkBike(bike1)
     anchorage.releaseBike(reservedRentToken1)
     anchorage.parkBike(bike1)
+
     assertThrows[IllegalArgumentException] {
       anchorage.releaseBike(reservedRentToken1)
     }
@@ -105,6 +105,7 @@ class BikeAnchorageTest extends AnyFunSuite with BeforeAndAfterEach with Matcher
   test("givenABikeAnchorageWithAParkedBikeWhenRetrieveTheBikeUsingAnExpiredTokenThenTheAnchorageShouldNotReleaseTheBike") {
     anchorage.parkBike(bike1)
     val expiredToken = new ReservedToken(new Token(owner = user, expiration = LocalDateTime.now.minusDays(1)), user, tokenRegistry)
+
     assertThrows[IllegalArgumentException] {
       anchorage.releaseBike(expiredToken)
     }
@@ -115,6 +116,7 @@ class BikeAnchorageTest extends AnyFunSuite with BeforeAndAfterEach with Matcher
     val retrievedBike = anchorage.releaseBike(reservedRentToken1)
     val trip = trips.getCurrentTripForBike(retrievedBike)
     val bikePickUpEvent = trip.get.pickUp
+
     bikePickUpEvent.user shouldBe reservedRentToken1.owner
     bikePickUpEvent.consumedToken shouldNot be(null)
     bikePickUpEvent.bike shouldBe retrievedBike
@@ -123,6 +125,7 @@ class BikeAnchorageTest extends AnyFunSuite with BeforeAndAfterEach with Matcher
   test("givenABannedUserAndAParkedBikeWhenRetrieveTheBikeUsingAReservedTokenThenTheBikeAnchorageShouldRejectToReleaseTheBike") {
     anchorage.parkBike(bike1)
     reservedRentToken1.owner.ban(Period.ofDays(2))
+
     assertThrows[IllegalArgumentException] {
       anchorage.releaseBike(reservedRentToken1)
     }
