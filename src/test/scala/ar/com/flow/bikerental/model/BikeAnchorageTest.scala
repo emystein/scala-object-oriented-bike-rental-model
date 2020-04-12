@@ -12,7 +12,7 @@ import scala.util.Random
 
 class BikeAnchorageTest extends AnyFunSuite with TestObjects with BeforeAndAfterEach with Matchers {
   private var tokenRegistry: TokenRegistry = null
-  private var trips: Trips = null
+  private var trips: TripRegistry = null
   private var station: BikeStation = null
   private var anchorage: BikeAnchorage = null
   private var reservedRentToken1: ReservedToken = null
@@ -20,7 +20,7 @@ class BikeAnchorageTest extends AnyFunSuite with TestObjects with BeforeAndAfter
   override protected def beforeEach(): Unit = {
     tokenRegistry = TokenRegistry(new TokenGenerator(new Random))
     reservedRentToken1 = tokenRegistry.reserveTokenForUser(user)
-    trips = new Trips(tripCompletionRules)
+    trips = new TripRegistry(tripCompletionRules)
     station = new BikeStation(1, trips)
     anchorage = station.getFreeSpots.iterator.next
   }

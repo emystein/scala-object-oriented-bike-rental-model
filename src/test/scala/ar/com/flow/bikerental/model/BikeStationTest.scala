@@ -10,12 +10,12 @@ import scala.util.Random
 
 class BikeStationTest extends AnyFunSuite with TestObjects with BeforeAndAfterEach with Matchers {
   private val tokenRegistry = TokenRegistry(new TokenGenerator(new Random))
-  private var trips: Trips = null
+  private var trips: TripRegistry = null
   private var reservedToken: ReservedToken = null
 
   override protected def beforeEach(): Unit = {
     reservedToken = tokenRegistry.reserveTokenForUser(user)
-    trips = new Trips(tripCompletionRules)
+    trips = new TripRegistry(tripCompletionRules)
   }
   
   test("givenABikeStationWhenAskForAnchoragesThenItShouldReturnAnchorages") {

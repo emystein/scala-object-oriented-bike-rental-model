@@ -7,7 +7,7 @@ import ar.com.flow.bikerental.model.trip.completion.{TripCompletionRules, TripRe
 
 import scala.collection.mutable
 
-case class Trips(tripCompletionRules: TripCompletionRules) {
+case class TripRegistry(tripCompletionRules: TripCompletionRules) {
   private val tripsByBike = new mutable.HashMap[Bike, Trip]
 
   def startTrip(bike: Bike, reservedToken: ReservedToken): Trip = {

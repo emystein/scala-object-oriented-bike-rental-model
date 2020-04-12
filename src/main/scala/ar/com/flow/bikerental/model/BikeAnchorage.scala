@@ -2,7 +2,7 @@ package ar.com.flow.bikerental.model
 
 import ar.com.flow.bikerental.model.token.ReservedToken
 
-class BikeAnchorage(val trips: Trips) {
+class BikeAnchorage(val trips: TripRegistry) {
   var parkedBike: Option[Bike] = None
 
   /**
