@@ -7,16 +7,12 @@ import ar.com.flow.bikerental.model.trip.completion.{TripCompletionRules, TripRe
 
 case class Trip(bike: Bike, reservedToken: ReservedToken, completionRules: TripCompletionRules) {
   val pickUp = BikePickUpEvent(bike, reservedToken)
+  var completionResult: Option[TripResult] = None
 
-  def finish: TripResult = {
+  def finish: Option[TripResult] = {
     val completedTrip = new CompletedTrip(pickUp, now)
-
     val rulesCheckResult = completionRules.test(completedTrip)
-
-    if (rulesCheckResult.userIsBanned) {
-      throw new IllegalStateException()
-    } else {
-      TripResult(completedTrip, rulesCheckResult)
-    }
+    completionResult = Some(new TripResult(completedTrip, rulesCheckResult))
+    completionResult
   }
 }
