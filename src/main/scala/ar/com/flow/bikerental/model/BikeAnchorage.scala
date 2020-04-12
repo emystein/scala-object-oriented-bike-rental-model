@@ -12,8 +12,7 @@ class BikeAnchorage(val trips: Trips) {
   def parkBike(bike: Bike) = {
     require(parkedBike.isEmpty, "There is already a parked bike here.")
     parkedBike = Some(bike)
-    val trip = trips.getCurrentTripForBike(bike)
-    trip.map(_.finish)
+    trips.finishCurrentTripForBike(bike)
   }
 
   def isLocked = parkedBike.isDefined

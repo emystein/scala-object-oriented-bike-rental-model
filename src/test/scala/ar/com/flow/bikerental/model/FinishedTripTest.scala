@@ -20,20 +20,20 @@ class FinishedTripTest extends AnyFunSuite with TestObjects with BeforeAndAfterE
     bikePickup = BikePickUpEvent(bike1, reservedToken)
   }
 
-  test("givenACompletedBikeRideWhenGetTheRideDurationThenItShouldBeDurationBetweenPickUpAndDropOff") {
-    val completedBikeRide = new FinishedTrip(bikePickup, bikeDropOff)
-    completedBikeRide.duration shouldBe(Duration.between(bikePickup.timestamp, bikeDropOff))
+  test("givenAFinishedTripWhenGetTheRideDurationThenItShouldBeDurationBetweenPickUpAndDropOff") {
+    val finishedTrip = new FinishedTrip(bikePickup, bikeDropOff)
+    finishedTrip.duration shouldBe(Duration.between(bikePickup.timestamp, bikeDropOff))
   }
 
-  test("givenACompletedBikeRideWhenAskTheRideLastedForMoreThan2HoursThenItShouldReturnFalse") {
+  test("givenAFinishedTripWhenAskTheRideLastedForMoreThan2HoursThenItShouldReturnFalse") {
     bikeDropOff = bikePickup.timestamp.plusHours(1)
-    val completedBikeRide = new FinishedTrip(bikePickup, bikeDropOff)
-    completedBikeRide.hasLastedMoreThan(Duration.ofHours(2)) shouldBe false
+    val finishedTrip = new FinishedTrip(bikePickup, bikeDropOff)
+    finishedTrip.hasLastedMoreThan(Duration.ofHours(2)) shouldBe false
   }
 
-  test("givenACompletedBikeRideWhenAskTheRideLastedForMoreThan2HoursThenItShouldReturnTrue") {
+  test("givenAFinishedTripWhenAskTheRideLastedForMoreThan2HoursThenItShouldReturnTrue") {
     bikeDropOff = bikePickup.timestamp.plusHours(3)
-    val completedBikeRide = new FinishedTrip(bikePickup, bikeDropOff)
-    completedBikeRide.hasLastedMoreThan(Duration.ofHours(2)) shouldBe true
+    val finishedTrip = new FinishedTrip(bikePickup, bikeDropOff)
+    finishedTrip.hasLastedMoreThan(Duration.ofHours(2)) shouldBe true
   }
 }

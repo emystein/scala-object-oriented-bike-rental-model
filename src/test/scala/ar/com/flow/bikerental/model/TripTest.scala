@@ -29,16 +29,4 @@ class TripTest extends AnyFunSuite with TestObjects with BeforeAndAfterEach with
     trip = Trip(pickUpEvent, tripCompletionRules)
     trip.pickUp.timestamp shouldNot be(null)
   }
-
-  test("givenATripWhenFinishTripThenTheEventShouldBePresent") {
-    trip = Trip(pickUpEvent, tripCompletionRules)
-    val tripCompletionResult = trip.finish
-    tripCompletionResult shouldNot be(null)
-  }
-
-  test("givenATripWithPickUpEventWhenTripCompleteTripThenResultShouldBeSuccess") {
-    trip = Trip(pickUpEvent, tripCompletionRules)
-    val tripCompletionResult = trip.finish
-    tripCompletionResult.rulesCheckResult.isInstanceOf[SuccessResult] shouldBe true
-  }
 }
