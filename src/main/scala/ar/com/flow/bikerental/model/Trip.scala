@@ -7,12 +7,10 @@ import ar.com.flow.bikerental.model.trip.completion.{TripCompletionRules, TripRe
 
 case class Trip(bike: Bike, reservedToken: ReservedToken, completionRules: TripCompletionRules) {
   val pickUp = BikePickUpEvent(bike, reservedToken)
-  var completionResult: Option[TripResult] = None
 
-  def finish: Option[TripResult] = {
+  def finish: TripResult = {
     val completedTrip = new CompletedTrip(pickUp, now)
     val rulesCheckResult = completionRules.test(completedTrip)
-    completionResult = Some(new TripResult(completedTrip, rulesCheckResult))
-    completionResult
+    TripResult(completedTrip, rulesCheckResult)
   }
 }
