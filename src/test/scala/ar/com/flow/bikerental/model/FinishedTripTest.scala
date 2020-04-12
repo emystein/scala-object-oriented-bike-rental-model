@@ -22,7 +22,7 @@ class FinishedTripTest extends AnyFunSuite with TestObjects with BeforeAndAfterE
 
   test("givenACompletedBikeRideWhenGetTheRideDurationThenItShouldBeDurationBetweenPickUpAndDropOff") {
     val completedBikeRide = new FinishedTrip(bikePickup, bikeDropOff)
-    completedBikeRide.getDuration shouldBe(Duration.between(bikePickup.timestamp, bikeDropOff))
+    completedBikeRide.duration shouldBe(Duration.between(bikePickup.timestamp, bikeDropOff))
   }
 
   test("givenACompletedBikeRideWhenAskTheRideLastedForMoreThan2HoursThenItShouldReturnFalse") {

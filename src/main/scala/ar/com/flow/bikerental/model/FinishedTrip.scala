@@ -7,9 +7,9 @@ class FinishedTrip(var bikePickup: BikePickUpEvent, val dropOffTimestamp: LocalD
   val bike = bikePickup.bike
   val bikeDropOff = BikeDropOffEvent(bikePickup.user, bikePickup.bike, dropOffTimestamp)
 
-  def getDuration: Duration = Duration.between(bikePickup.timestamp, bikeDropOff.timestamp)
+  def duration: Duration = Duration.between(bikePickup.timestamp, bikeDropOff.timestamp)
 
-  def getEndDayOfWeek: DayOfWeek = bikeDropOff.timestamp.getDayOfWeek
+  def endDayOfWeek: DayOfWeek = bikeDropOff.timestamp.getDayOfWeek
 
-  def hasLastedMoreThan(duration: Duration): Boolean = getDuration.compareTo(duration) > 0
+  def hasLastedMoreThan(duration: Duration): Boolean = this.duration.compareTo(duration) > 0
 }
