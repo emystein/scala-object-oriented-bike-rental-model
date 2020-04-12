@@ -9,7 +9,8 @@ case class Trips(bikeTripCompleteChecker: TripCompletionRules) {
   private val tripsByBike = new mutable.HashMap[Bike, Trip]
 
   def startTrip(bike: Bike, reservedToken: ReservedToken): Trip = {
-    val trip = Trip(bike, reservedToken, bikeTripCompleteChecker)
+    val pickUp = BikePickUpEvent(bike, reservedToken)
+    val trip = Trip(pickUp, bikeTripCompleteChecker)
     tripsByBike.put(bike, trip)
     trip
   }

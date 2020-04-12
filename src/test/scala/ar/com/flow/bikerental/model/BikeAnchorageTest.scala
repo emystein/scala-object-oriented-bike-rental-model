@@ -46,8 +46,9 @@ class BikeAnchorageTest extends AnyFunSuite with TestObjects with BeforeAndAfter
     val completedBikeTrip = anchorage.parkBike(bike1)
     val trip = trips.getCurrentTripForBike(bike1)
 
-    completedBikeTrip.get.completedTrip.user shouldBe(trip.get.reservedToken.owner)
-    completedBikeTrip.get.completedTrip.bike shouldBe(trip.get.bike)
+    val completedTrip = completedBikeTrip.get.completedTrip
+    completedTrip.user shouldBe(trip.get.pickUp.reservedToken.owner)
+    completedTrip.bike shouldBe(trip.get.pickUp.bike)
   }
 
   test("givenAnEmptyBikeAnchorageWhenParkABikeThenPostActionShouldBeExecuted") {

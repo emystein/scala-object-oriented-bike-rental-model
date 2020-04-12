@@ -12,30 +12,32 @@ class TripTest extends AnyFunSuite with TestObjects with BeforeAndAfterEach with
   private var trip: Trip = null
   private var tokenRegistry: TokenRegistry = null
   private var reservedToken: ReservedToken = null
+  private var pickUpEvent: BikePickUpEvent = null
 
   override protected def beforeEach(): Unit = {
     tokenRegistry = TokenRegistry(new TokenGenerator(new Random))
     reservedToken = tokenRegistry.reserveTokenForUser(user)
+    pickUpEvent = BikePickUpEvent(bike1, reservedToken)
   }
 
   test("givenAnInitialStateWhenCreateTripThenPickUpShouldBePresent") {
-    trip = Trip(bike1, reservedToken, tripCompletionRules)
+    trip = Trip(pickUpEvent, tripCompletionRules)
     trip.pickUp shouldNot be(null)
   }
 
   test("givenACreatedTripWhenGetPickUpThenItShouldBePresent") {
-    trip = Trip(bike1, reservedToken, tripCompletionRules)
+    trip = Trip(pickUpEvent, tripCompletionRules)
     trip.pickUp.timestamp shouldNot be(null)
   }
 
   test("givenATripWhenFinishTripThenTheEventShouldBePresent") {
-    trip = Trip(bike1, reservedToken, tripCompletionRules)
+    trip = Trip(pickUpEvent, tripCompletionRules)
     val tripCompletionResult = trip.finish
     tripCompletionResult shouldNot be(null)
   }
 
   test("givenATripWithPickUpEventWhenTripCompleteTripThenResultShouldBeSuccess") {
-    trip = Trip(bike1, reservedToken, tripCompletionRules)
+    trip = Trip(pickUpEvent, tripCompletionRules)
     val tripCompletionResult = trip.finish
     tripCompletionResult.rulesCheckResult.isInstanceOf[SuccessResult] shouldBe true
   }
