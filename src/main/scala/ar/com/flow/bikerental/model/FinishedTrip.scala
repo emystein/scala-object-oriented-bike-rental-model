@@ -2,7 +2,7 @@ package ar.com.flow.bikerental.model
 
 import java.time.{DayOfWeek, Duration, LocalDateTime}
 
-class CompletedTrip(var bikePickup: BikePickUpEvent, val dropOffTimestamp: LocalDateTime) {
+class FinishedTrip(var bikePickup: BikePickUpEvent, val dropOffTimestamp: LocalDateTime) {
   val user = bikePickup.user
   val bike = bikePickup.bike
   val bikeDropOff = BikeDropOffEvent(bikePickup.user, bikePickup.bike, dropOffTimestamp)

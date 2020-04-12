@@ -6,7 +6,7 @@ import ar.com.flow.bikerental.model.trip.completion.{TripCompletionRules, TripRe
 
 case class Trip(pickUp: BikePickUpEvent, completionRules: TripCompletionRules) {
   def finish: TripResult = {
-    val completedTrip = new CompletedTrip(pickUp, now)
+    val completedTrip = new FinishedTrip(pickUp, now)
     val rulesCheckResult = completionRules.test(completedTrip)
     TripResult(completedTrip, rulesCheckResult)
   }

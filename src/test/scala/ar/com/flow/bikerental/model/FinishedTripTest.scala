@@ -10,7 +10,7 @@ import org.scalatest.matchers.should.Matchers
 
 import scala.util.Random
 
-class CompletedTripTest extends AnyFunSuite with TestObjects with BeforeAndAfterEach with Matchers {
+class FinishedTripTest extends AnyFunSuite with TestObjects with BeforeAndAfterEach with Matchers {
   private var bikePickup: BikePickUpEvent = null
   private var bikeDropOff: LocalDateTime = now
 
@@ -21,19 +21,19 @@ class CompletedTripTest extends AnyFunSuite with TestObjects with BeforeAndAfter
   }
 
   test("givenACompletedBikeRideWhenGetTheRideDurationThenItShouldBeDurationBetweenPickUpAndDropOff") {
-    val completedBikeRide = new CompletedTrip(bikePickup, bikeDropOff)
+    val completedBikeRide = new FinishedTrip(bikePickup, bikeDropOff)
     completedBikeRide.getDuration shouldBe(Duration.between(bikePickup.timestamp, bikeDropOff))
   }
 
   test("givenACompletedBikeRideWhenAskTheRideLastedForMoreThan2HoursThenItShouldReturnFalse") {
     bikeDropOff = bikePickup.timestamp.plusHours(1)
-    val completedBikeRide = new CompletedTrip(bikePickup, bikeDropOff)
+    val completedBikeRide = new FinishedTrip(bikePickup, bikeDropOff)
     completedBikeRide.hasLastedMoreThan(Duration.ofHours(2)) shouldBe false
   }
 
   test("givenACompletedBikeRideWhenAskTheRideLastedForMoreThan2HoursThenItShouldReturnTrue") {
     bikeDropOff = bikePickup.timestamp.plusHours(3)
-    val completedBikeRide = new CompletedTrip(bikePickup, bikeDropOff)
+    val completedBikeRide = new FinishedTrip(bikePickup, bikeDropOff)
     completedBikeRide.hasLastedMoreThan(Duration.ofHours(2)) shouldBe true
   }
 }

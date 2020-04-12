@@ -1,5 +1,5 @@
 package ar.com.flow.bikerental.model.trip.completion
 
-import ar.com.flow.bikerental.model.CompletedTrip
+import ar.com.flow.bikerental.model.FinishedTrip
 
-case class TripResult(completedTrip: CompletedTrip, rulesCheckResult: RulesCheckResult)
+case class TripResult(completedTrip: FinishedTrip, rulesCheckResult: RulesCheckResult)

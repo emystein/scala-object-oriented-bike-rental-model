@@ -5,7 +5,7 @@ import java.time.LocalDateTime.now
 
 import ar.com.flow.bikerental.model.token.{ReservedToken, Token, TokenGenerator, TokenRegistry}
 import ar.com.flow.bikerental.model.trip.completion.{TripCompletionRules, TripCompletionRulesFactory}
-import ar.com.flow.bikerental.model.{Bike, BikePickUpEvent, CompletedTrip, User}
+import ar.com.flow.bikerental.model.{Bike, BikePickUpEvent, FinishedTrip, User}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
@@ -21,7 +21,7 @@ class TripCompletionRulesTest extends AnyFunSuite with BeforeAndAfterEach with M
   private var reservedToken: ReservedToken = null
   private var bikePickup: BikePickUpEvent = null
   private var bikeDropOff: LocalDateTime = null
-  private var completedTrip: CompletedTrip = null
+  private var completedTrip: FinishedTrip = null
 
   override protected def beforeEach(): Unit = {
     bikeTripCompleteChecker = TripCompletionRulesFactory.create
@@ -37,7 +37,7 @@ class TripCompletionRulesTest extends AnyFunSuite with BeforeAndAfterEach with M
 
     bikeDropOff = mondayAt10Am
 
-    completedTrip = new CompletedTrip(bikePickup, bikeDropOff)
+    completedTrip = new FinishedTrip(bikePickup, bikeDropOff)
 
     val result = bikeTripCompleteChecker.test(completedTrip)
 
@@ -50,7 +50,7 @@ class TripCompletionRulesTest extends AnyFunSuite with BeforeAndAfterEach with M
 
     bikeDropOff = mondayAt10Am
 
-    completedTrip = new CompletedTrip(bikePickup, bikeDropOff)
+    completedTrip = new FinishedTrip(bikePickup, bikeDropOff)
 
     val result = bikeTripCompleteChecker.test(completedTrip)
 
@@ -63,7 +63,7 @@ class TripCompletionRulesTest extends AnyFunSuite with BeforeAndAfterEach with M
 
     bikeDropOff = sundayAt10Am
 
-    completedTrip = new CompletedTrip(bikePickup, bikeDropOff)
+    completedTrip = new FinishedTrip(bikePickup, bikeDropOff)
 
     val result = bikeTripCompleteChecker.test(completedTrip)
 
@@ -76,7 +76,7 @@ class TripCompletionRulesTest extends AnyFunSuite with BeforeAndAfterEach with M
 
     bikeDropOff = sundayAt10Am
 
-    completedTrip = new CompletedTrip(bikePickup, bikeDropOff)
+    completedTrip = new FinishedTrip(bikePickup, bikeDropOff)
 
     val result = bikeTripCompleteChecker.test(completedTrip)
 
