@@ -10,17 +10,14 @@ import org.scalatest.matchers.should.Matchers
 
 import scala.util.Random
 
-class CompletedTripTest extends AnyFunSuite with BeforeAndAfterEach with Matchers {
-  private val user: User = User("1", "Emiliano Menéndez")
-  private var bike: Bike = null
+class CompletedTripTest extends AnyFunSuite with TestObjects with BeforeAndAfterEach with Matchers {
   private var bikePickup: BikePickUpEvent = null
   private var bikeDropOff: LocalDateTime = now
 
   override protected def beforeEach(): Unit = {
     val tokenRegistry = TokenRegistry(new TokenGenerator(new Random))
     val reservedToken = new ReservedToken(new Token(1L, now.plusDays(1),  user), user, tokenRegistry)
-    bikePickup = BikePickUpEvent(bike, reservedToken)
-    bike = Bike("1")
+    bikePickup = BikePickUpEvent(bike1, reservedToken)
   }
 
   test("givenACompletedBikeRideWhenGetTheRideDurationThenItShouldBeDurationBetweenPickUpAndDropOff") {

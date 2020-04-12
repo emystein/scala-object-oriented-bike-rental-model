@@ -7,25 +7,22 @@ import org.scalatest.matchers.should.Matchers
 
 import scala.util.Random
 
-class BikePickUpEventTest extends AnyFunSuite with BeforeAndAfterEach with Matchers {
-  private val user: User = new User("1", "Emiliano Menéndez")
-  private var bike: Bike = null
+class BikePickUpEventTest extends AnyFunSuite with TestObjects with BeforeAndAfterEach with Matchers {
   private var tokenRegistry: TokenRegistry = null
   private var reservedToken: ReservedToken = null
 
   override protected def beforeEach(): Unit = {
     tokenRegistry = TokenRegistry(new TokenGenerator(new Random))
     reservedToken = tokenRegistry.reserveTokenForUser(user)
-    bike = Bike("1")
   }
 
   test("givenAReservedTokenWhenCreateBikePickUpEventThenTheBikePickUpEventShouldHaveTheReservedTokenOwner") {
-    val event = BikePickUpEvent(bike, reservedToken)
+    val event = BikePickUpEvent(bike1, reservedToken)
     event.user should be(reservedToken.owner)
   }
 
   test("givenABikeWhenCreateBikePickUpEventThenTheBikePickUpEventShouldHaveTheBike") {
-    val event = BikePickUpEvent(bike, reservedToken)
-    event.bike should be(bike)
+    val event = BikePickUpEvent(bike1, reservedToken)
+    event.bike should be(bike1)
   }
 }
