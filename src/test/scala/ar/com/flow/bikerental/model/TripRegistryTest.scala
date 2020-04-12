@@ -21,7 +21,7 @@ class TripRegistryTest extends AnyFunSuite with TestObjects with BeforeAndAfterE
 
   test("givenATripWhenFinishTripThenTheEventShouldBePresent") {
     val pickUpEvent = BikePickUpEvent(bike1, reservedToken)
-    val trip = Trip(pickUpEvent, tripCompletionRules)
+    val trip = Trip(pickUpEvent)
 
     val tripCompletionResult = trips.finish(trip)
 

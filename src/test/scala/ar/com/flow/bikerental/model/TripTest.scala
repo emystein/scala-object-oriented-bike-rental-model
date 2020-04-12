@@ -9,7 +9,6 @@ import org.scalatest.matchers.should.Matchers
 import scala.util.Random
 
 class TripTest extends AnyFunSuite with TestObjects with BeforeAndAfterEach with Matchers {
-  private var trip: Trip = null
   private var tokenRegistry: TokenRegistry = null
   private var reservedToken: ReservedToken = null
   private var pickUpEvent: BikePickUpEvent = null
@@ -21,12 +20,12 @@ class TripTest extends AnyFunSuite with TestObjects with BeforeAndAfterEach with
   }
 
   test("givenAnInitialStateWhenCreateTripThenPickUpShouldBePresent") {
-    trip = Trip(pickUpEvent, tripCompletionRules)
+    val trip = Trip(pickUpEvent)
     trip.pickUp shouldNot be(null)
   }
 
   test("givenACreatedTripWhenGetPickUpThenItShouldBePresent") {
-    trip = Trip(pickUpEvent, tripCompletionRules)
+    val trip = Trip(pickUpEvent)
     trip.pickUp.timestamp shouldNot be(null)
   }
 }

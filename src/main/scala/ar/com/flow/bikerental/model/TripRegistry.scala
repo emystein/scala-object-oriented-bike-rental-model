@@ -12,7 +12,7 @@ case class TripRegistry(tripCompletionRules: TripCompletionRules) {
 
   def startTrip(bike: Bike, reservedToken: ReservedToken): Trip = {
     val pickUp = BikePickUpEvent(bike, reservedToken)
-    val trip = Trip(pickUp, tripCompletionRules)
+    val trip = Trip(pickUp)
     tripsByBike.put(bike, trip)
     trip
   }
