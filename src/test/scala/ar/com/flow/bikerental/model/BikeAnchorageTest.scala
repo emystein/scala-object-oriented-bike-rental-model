@@ -25,41 +25,6 @@ class BikeAnchorageTest extends AnyFunSuite with TestObjects with BeforeAndAfter
     anchorage = station.getFreeSpots.iterator.next
   }
 
-  test("givenAnEmptyBikeAnchorageWhenAskForBikeThenItShouldReturnEmpty") {
-    anchorage.parkedBike shouldBe None
-  }
-
-  test("givenAnEmptyBikeAnchorageWhenAskIfItsLockedThenItShouldReturnFalse") {
-    anchorage.isLocked shouldBe false
-  }
-
-  test("givenAnEmptyBikeAnchorageWhenParkABikeThenTheAnchorageShouldBeLocked") {
-    anchorage.parkBike(bike1)
-
-    anchorage.isLocked shouldBe true
-  }
-
-  test("givenAnEmptyBikeAnchorageWhenParkABikeThenACompletedBikeTripShouldBePresent") { // In order to release a bike, first the anchorage must have a parked bike.
-    anchorage.parkBike(bike1)
-    // Releasing a bike starts a trip
-    anchorage.releaseBike(reservedRentToken1)
-    val completedBikeTrip = anchorage.parkBike(bike1)
-    val trip = trips.getCurrentTripForBike(bike1)
-
-    val completedTrip = completedBikeTrip.get.completedTrip
-    completedTrip.user shouldBe(trip.get.pickUp.reservedToken.owner)
-    completedTrip.bike shouldBe(trip.get.pickUp.bike)
-  }
-
-  test("givenAnEmptyBikeAnchorageWhenParkABikeThenPostActionShouldBeExecuted") {
-    anchorage.parkBike(bike1)
-    anchorage.releaseBike(reservedRentToken1)
-    val tripCompletionResult = anchorage.parkBike(bike1)
-
-    tripCompletionResult shouldNot be(null)
-    tripCompletionResult.get.rulesCheckResult.isInstanceOf[SuccessResult] shouldBe true
-  }
-
   test("givenABikeAnchorageWithAParkedBikeWhenAskingTheAnchorageForTheBikeThenItShouldReturnTheParkedBike") {
     anchorage.parkBike(bike1)
 
@@ -79,12 +44,6 @@ class BikeAnchorageTest extends AnyFunSuite with TestObjects with BeforeAndAfter
     anchorage.releaseBike(reservedRentToken1)
 
     anchorage.parkedBike shouldBe None
-  }
-
-  test("givenAnEmptyBikeAnchorageWhenRetrieveTheBikeThenItShouldThrowIllegalArgumentException") {
-    assertThrows[IllegalArgumentException] {
-      anchorage.releaseBike(reservedRentToken1)
-    }
   }
 
   test("givenABikeAnchorageWithAParkedBikeWhenRetrieveTheBikeThenTheRetrieveBikeShouldBeTheParkedOne") {
