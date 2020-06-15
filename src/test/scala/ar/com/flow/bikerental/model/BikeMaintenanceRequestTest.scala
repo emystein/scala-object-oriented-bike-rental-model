@@ -1,10 +1,7 @@
 package ar.com.flow.bikerental.model
 
-import java.time.{LocalDateTime, Period}
-
-import ar.com.flow.bikerental.model.token.{ReservedToken, Token, TokenGenerator, TokenRegistry}
-import org.scalatest.{BeforeAndAfterEach, WordSpec}
-import org.scalatest.funsuite.AnyFunSuite
+import ar.com.flow.bikerental.model.token.{ReservedToken, TokenGenerator, TokenRegistry}
+import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -26,23 +23,21 @@ class BikeMaintenanceRequestTest extends AnyWordSpec with TestObjects with Befor
   }
 
   "Empty anchorage" when {
-    "request maintenance" should {
+    "request bike maintenance" should {
       "ignore" in {
-        anchorage.requestMaintenance()
-
-        anchorage.bikeAvailability shouldBe None
+        anchorage.requestBikeMaintenance()
       }
     }
   }
 
   "Anchorage with parked bike" when {
-    "request maintenance" should {
+    "request bike maintenance" should {
       "need maintenance" in {
         anchorage.parkBike(bike1)
 
-        anchorage.requestMaintenance()
+        anchorage.requestBikeMaintenance()
 
-        anchorage.bikeAvailability shouldBe Some(NeedMaintenance())
+        anchorage.parkedBike.get.maintenanceStatus shouldBe Some(NeedMaintenance())
       }
     }
   }

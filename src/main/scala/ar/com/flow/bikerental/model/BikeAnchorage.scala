@@ -3,8 +3,6 @@ package ar.com.flow.bikerental.model
 import ar.com.flow.bikerental.model.token.ReservedToken
 
 class BikeAnchorage(val trips: TripRegistry) {
-  var bikeAvailability: Option[BikeAvailability] = None
-
   var parkedBike: Option[Bike] = None
 
   /**
@@ -34,7 +32,7 @@ class BikeAnchorage(val trips: TripRegistry) {
     releasedBike
   }
 
-  def requestMaintenance() = bikeAvailability = parkedBike.map(b => NeedMaintenance())
+  def requestBikeMaintenance() = parkedBike.map(_.maintenanceStatus = Some(NeedMaintenance()))
 
   private def releaseParkedBike = {
     val releasedBike = parkedBike.get
