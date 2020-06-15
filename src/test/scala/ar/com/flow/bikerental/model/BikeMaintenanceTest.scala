@@ -7,7 +7,7 @@ import org.scalatest.wordspec.AnyWordSpec
 
 import scala.util.Random
 
-class BikeMaintenanceRequestTest extends AnyWordSpec with TestObjects with BeforeAndAfterEach with Matchers {
+class BikeMaintenanceTest extends AnyWordSpec with TestObjects with BeforeAndAfterEach with Matchers {
   private var tokenRegistry: TokenRegistry = null
   private var bikeShop: BikeShop = null
   private var trips: TripRegistry = null
@@ -24,14 +24,6 @@ class BikeMaintenanceRequestTest extends AnyWordSpec with TestObjects with Befor
     anchorage = station.getFreeSpots.iterator.next
   }
 
-  "Empty anchorage" when {
-    "request bike maintenance" should {
-      "ignore" in {
-        anchorage.requestBikeMaintenance()
-      }
-    }
-  }
-
   "Anchorage with parked bike" when {
     "request bike maintenance" should {
       "inform bike shop that bike needs maintenance" in {
@@ -39,9 +31,18 @@ class BikeMaintenanceRequestTest extends AnyWordSpec with TestObjects with Befor
 
         anchorage.requestBikeMaintenance()
 
-        anchorage.parkedBike.get.maintenanceStatus shouldBe Some(NeedMaintenance())
-
         bikeShop.maintenancePickupRequests should contain(BikeMaintenancePickup(bike1))
+      }
+    }
+    "pickup bike for maintenance" should {
+      "release the bike" in {
+        anchorage.parkBike(bike1)
+
+        val maintenancePickupRequest = anchorage.requestBikeMaintenance()
+
+        val bike = anchorage.releaseForService(maintenancePickupRequest.get)
+
+        BikeLocationRegistry.relativeLocationOf(bike) shouldBe InTransitToShop()
       }
     }
   }
