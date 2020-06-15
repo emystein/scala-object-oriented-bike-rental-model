@@ -2,8 +2,8 @@ package ar.com.flow.bikerental.model
 
 import ar.com.flow.bikerental.model.token.ReservedToken
 
-class BikeStation(val numberOfBikeAnchorages: Int, val trips: TripRegistry) {
-  val bikeAnchorages = (1 to numberOfBikeAnchorages).map(i => new BikeAnchorage(trips))
+class BikeStation(val numberOfBikeAnchorages: Int, val trips: TripRegistry, val bikeShop: BikeShop) {
+  val bikeAnchorages = (1 to numberOfBikeAnchorages).map(i => new BikeAnchorage(trips, bikeShop))
 
   def getFreeSpots = bikeAnchorages.filter(anchorage => anchorage.parkedBike.isEmpty)
 

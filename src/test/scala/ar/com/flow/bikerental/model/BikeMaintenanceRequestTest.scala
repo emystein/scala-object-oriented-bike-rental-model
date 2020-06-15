@@ -9,6 +9,7 @@ import scala.util.Random
 
 class BikeMaintenanceRequestTest extends AnyWordSpec with TestObjects with BeforeAndAfterEach with Matchers {
   private var tokenRegistry: TokenRegistry = null
+  private var bikeShop: BikeShop = null
   private var trips: TripRegistry = null
   private var station: BikeStation = null
   private var anchorage: BikeAnchorage = null
@@ -17,8 +18,9 @@ class BikeMaintenanceRequestTest extends AnyWordSpec with TestObjects with Befor
   override protected def beforeEach(): Unit = {
     tokenRegistry = TokenRegistry(new TokenGenerator(new Random))
     reservedRentToken1 = tokenRegistry.reserveTokenForUser(user)
-    trips = new TripRegistry(tripCompletionRules)
-    station = new BikeStation(1, trips)
+    bikeShop = new BikeShop()
+    trips = TripRegistry(tripCompletionRules)
+    station = new BikeStation(1, trips, bikeShop)
     anchorage = station.getFreeSpots.iterator.next
   }
 
@@ -32,12 +34,14 @@ class BikeMaintenanceRequestTest extends AnyWordSpec with TestObjects with Befor
 
   "Anchorage with parked bike" when {
     "request bike maintenance" should {
-      "need maintenance" in {
+      "inform bike shop that bike needs maintenance" in {
         anchorage.parkBike(bike1)
 
         anchorage.requestBikeMaintenance()
 
         anchorage.parkedBike.get.maintenanceStatus shouldBe Some(NeedMaintenance())
+
+        bikeShop.maintenancePickupRequests should contain(BikeMaintenancePickup(bike1))
       }
     }
   }

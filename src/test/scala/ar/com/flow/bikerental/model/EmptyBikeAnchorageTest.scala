@@ -1,8 +1,6 @@
 package ar.com.flow.bikerental.model
 
-import java.time.{LocalDateTime, Period}
-
-import ar.com.flow.bikerental.model.token.{ReservedToken, Token, TokenGenerator, TokenRegistry}
+import ar.com.flow.bikerental.model.token.{ReservedToken, TokenGenerator, TokenRegistry}
 import ar.com.flow.bikerental.model.trip.completion.SuccessResult
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.funsuite.AnyFunSuite
@@ -12,6 +10,7 @@ import scala.util.Random
 
 class EmptyBikeAnchorageTest extends AnyFunSuite with TestObjects with BeforeAndAfterEach with Matchers {
   private var tokenRegistry: TokenRegistry = null
+  private var bikeShop: BikeShop = null
   private var trips: TripRegistry = null
   private var station: BikeStation = null
   private var anchorage: BikeAnchorage = null
@@ -20,8 +19,9 @@ class EmptyBikeAnchorageTest extends AnyFunSuite with TestObjects with BeforeAnd
   override protected def beforeEach(): Unit = {
     tokenRegistry = TokenRegistry(new TokenGenerator(new Random))
     reservedRentToken1 = tokenRegistry.reserveTokenForUser(user)
+    bikeShop = new BikeShop()
     trips = new TripRegistry(tripCompletionRules)
-    station = new BikeStation(1, trips)
+    station = new BikeStation(1, trips, bikeShop)
     anchorage = station.getFreeSpots.iterator.next
   }
 
