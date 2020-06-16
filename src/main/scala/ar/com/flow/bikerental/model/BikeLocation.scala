@@ -5,7 +5,7 @@ import scala.collection.mutable
 object BikeLocationRegistry {
   var relativeLocation: mutable.Map[Bike, RelativeBikeLocation] = mutable.Map()
 
-  def setInTransitToShop(bike: Bike) = {
+  def setInTransitToShop(bike: Bike): Unit = {
     relativeLocation(bike) = InTransitToShop()
   }
 
