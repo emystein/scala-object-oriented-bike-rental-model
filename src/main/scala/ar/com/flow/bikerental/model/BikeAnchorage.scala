@@ -34,7 +34,7 @@ class BikeAnchorage(val trips: TripRegistry, bikeShop: BikeShop = new BikeShop()
 
   def requestBikeMaintenance() = bikeShop.requestMaintenancePickup(parkedBike)
 
-  def releaseForService(maintenancePickupRequest: BikeMaintenancePickup) = {
+  def releaseForMaintenance(maintenancePickupRequest: BikeMaintenancePickup) = {
     val bike = maintenancePickupRequest.bike
     BikeLocationRegistry.setInTransitToShop(bike)
     bike
