@@ -40,9 +40,9 @@ class BikeMaintenanceTest extends AnyWordSpec with TestObjects with BeforeAndAft
 
         val maintenanceRequest = anchorage.requestBikeMaintenance()
 
-        val maintenancePickupToken = bikeShop.getMaintenancePickupToken(maintenanceRequest)
+        val pickupToken = bikeShop.getMaintenancePickupToken(maintenanceRequest)
 
-        val bike = anchorage.releaseBike(maintenancePickupToken.get)
+        val bike = anchorage.releaseBike(pickupToken.get)
 
         BikeLocationRegistry.relativeLocationOf(bike.get) shouldBe InTransitToShop()
       }
@@ -51,11 +51,11 @@ class BikeMaintenanceTest extends AnyWordSpec with TestObjects with BeforeAndAft
       "not release the bike" in {
         anchorage.parkBike(bike1)
 
-        val maintenanceRequestForAnotherBike = Some(BikeMaintenanceRequest(bike2))
+        val maintenanceRequestForAnotherBike = BikeMaintenanceRequest(bike2)
 
-        val maintenancePickupToken = bikeShop.getMaintenancePickupToken(maintenanceRequestForAnotherBike)
+        val pickupToken = bikeShop.getMaintenancePickupToken(maintenanceRequestForAnotherBike)
 
-        val bike = anchorage.releaseBike(maintenancePickupToken.get)
+        val bike = anchorage.releaseBike(pickupToken.get)
 
         bike shouldBe None
       }
