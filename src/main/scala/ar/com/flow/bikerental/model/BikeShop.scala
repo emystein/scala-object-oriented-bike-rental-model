@@ -1,14 +1,21 @@
 package ar.com.flow.bikerental.model
 
 class BikeShop {
-  var maintenancePickupRequests: List[BikeMaintenancePickup] = Nil
+  def getMaintenancePickupToken(maintenanceRequest: Option[BikeMaintenanceRequest]): Option[BikeMaintenancePickupToken] = {
+    maintenanceRequest.map{r => maintenanceRequestsProcessed = maintenanceRequestsProcessed :+ r; BikeMaintenancePickupToken(r.bike)}
+  }
 
-  def requestMaintenancePickup(maybeBike: Option[Bike]): Option[BikeMaintenancePickup] = {
+  var maintenancePickupRequests: List[BikeMaintenanceRequest] = Nil
+
+  var maintenanceRequestsProcessed: List[BikeMaintenanceRequest] = Nil
+
+  def requestMaintenancePickup(maybeBike: Option[Bike]): Option[BikeMaintenanceRequest] = {
     maybeBike
-      .map(bike => BikeMaintenancePickup(bike))
+      .map(bike => BikeMaintenanceRequest(bike))
       .map{pickup => maintenancePickupRequests = maintenancePickupRequests :+ pickup; pickup}
   }
 }
 
-case class BikeMaintenancePickup(bike: Bike)
+case class BikeMaintenanceRequest(bike: Bike)
 
+case class BikeMaintenancePickupToken(bike: Bike)
