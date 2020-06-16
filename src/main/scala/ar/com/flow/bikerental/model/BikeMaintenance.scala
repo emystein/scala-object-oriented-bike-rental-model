@@ -9,7 +9,7 @@ class BikeShop {
 
   var maintenanceRequestsProcessed: List[BikeMaintenanceRequest] = Nil
 
-  def requestMaintenancePickup(maybeBike: Option[Bike]): Option[BikeMaintenanceRequest] = {
+  def requestMaintenance(maybeBike: Option[Bike]): Option[BikeMaintenanceRequest] = {
     maybeBike
       .map(bike => BikeMaintenanceRequest(bike))
       .map{pickup => maintenancePickupRequests = maintenancePickupRequests :+ pickup; pickup}
