@@ -28,37 +28,33 @@ class BikeMaintenanceTest extends AnyWordSpec with TestObjects with BeforeAndAft
     "request bike maintenance" should {
       "inform bike shop that bike needs maintenance" in {
         anchorage.parkBike(bike1)
-
         anchorage.requestBikeMaintenance()
-
         bikeShop.maintenancePickupRequests should contain(BikeMaintenanceRequest(bike1))
       }
     }
+  }
+  "Anchorage with parked bike and Maintenance Token for parked bike" when {
     "pickup bike for maintenance" should {
       "release the bike" in {
         anchorage.parkBike(bike1)
-
-        val maintenanceRequest = anchorage.requestBikeMaintenance()
-
-        val pickupToken = bikeShop.getMaintenancePickupToken(maintenanceRequest)
-
-        val bike = anchorage.releaseBike(pickupToken.get)
-
+        val bike = pickupBikeForMaintenance(bike1)
         BikeLocationRegistry.relativeLocationOf(bike.get) shouldBe InTransitToShop()
       }
     }
-    "try to pickup bike using maintenance request for another bike" should {
+  }
+  "Anchorage with parked bike and Maintenance Token for a different bike" when {
+    "pickup bike for maintenance" should {
       "not release the bike" in {
         anchorage.parkBike(bike1)
-
-        val maintenanceRequestForAnotherBike = Some(BikeMaintenanceRequest(bike2))
-
-        val pickupToken = bikeShop.getMaintenancePickupToken(maintenanceRequestForAnotherBike)
-
-        val bike = anchorage.releaseBike(pickupToken.get)
-
+        val bike = pickupBikeForMaintenance(bike2)
         bike shouldBe None
       }
     }
+  }
+
+  private def pickupBikeForMaintenance(bikeToPickup: Bike): Option[Bike] = {
+    val maintenanceRequest = Some(BikeMaintenanceRequest(bikeToPickup))
+    val pickupToken = bikeShop.getMaintenancePickupToken(maintenanceRequest)
+    anchorage.releaseBike(pickupToken.get)
   }
 }
