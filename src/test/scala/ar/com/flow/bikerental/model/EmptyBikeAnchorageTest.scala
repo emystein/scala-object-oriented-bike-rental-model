@@ -61,8 +61,6 @@ class EmptyBikeAnchorageTest extends AnyFunSuite with TestObjects with BeforeAnd
   }
 
   test("givenAnEmptyBikeAnchorageWhenRetrieveTheBikeThenItShouldThrowIllegalArgumentException") {
-    assertThrows[IllegalArgumentException] {
-      anchorage.releaseBike(reservedRentToken1)
-    }
+    anchorage.releaseBike(reservedRentToken1) shouldBe None
   }
 }

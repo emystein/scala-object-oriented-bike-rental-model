@@ -21,15 +21,12 @@ class BikeAnchorage(val trips: TripRegistry, bikeShop: BikeShop = new BikeShop()
    * Given a {@link Token}, consumes the token and releases the {@link Bike}.
    *
    * @param reservedToken the RentToken.
-   * @return the Bike.
-   * @throws IllegalStateException if there is no parked Bike, or the owner of the RentToken is banned
+   * @return the Bike if present and reservedToken is OK, None otherwise.
+   * @throws IllegalStateException if the owner of the RentToken is banned
    */
-  def releaseBike(reservedToken: ReservedToken) = {
-    require(parkedBike.isDefined, "There's no parked bike.")
+  def releaseBike(reservedToken: ReservedToken): Option[Bike] = {
     require(!reservedToken.owner.isBanned, "The user is banned.")
-    val releasedBike = releaseParkedBike
-    trips.startTrip(releasedBike, reservedToken)
-    releasedBike
+    releaseParkedBike.map(bike => trips.startTrip(bike, reservedToken)).map(_.pickUp.bike)
   }
 
   def requestBikeMaintenance(): Option[BikeMaintenanceRequest] = bikeShop.requestMaintenance(parkedBike)
@@ -38,8 +35,8 @@ class BikeAnchorage(val trips: TripRegistry, bikeShop: BikeShop = new BikeShop()
     parkedBike.filter(_ == token.bike)
   }
 
-  private def releaseParkedBike = {
-    val releasedBike = parkedBike.get
+  private def releaseParkedBike: Option[Bike] = {
+    val releasedBike = parkedBike
     parkedBike = None
     releasedBike
   }
