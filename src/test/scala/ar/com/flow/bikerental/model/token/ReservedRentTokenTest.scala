@@ -9,7 +9,7 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
-class ReservedTokenTest extends AnyFunSuite with BeforeAndAfterEach with Matchers {
+class ReservedRentTokenTest extends AnyFunSuite with BeforeAndAfterEach with Matchers {
   private val user: User = User("1", "Emiliano Menéndez")
   private var tokenRegistry: TokenRegistry = null
 
@@ -18,13 +18,13 @@ class ReservedTokenTest extends AnyFunSuite with BeforeAndAfterEach with Matcher
   }
 
   test("givenAReservedTokenWhenConsumeThenAConsumedTokenShouldBeCreated") {
-    val reservedToken = new ReservedToken(Token(value = 1L, expiration = LocalDateTime.now.plusDays(1), user), user, tokenRegistry)
+    val reservedToken = new ReservedRentToken(new RentToken(value = 1L, expiration = LocalDateTime.now.plusDays(1), user), user, tokenRegistry)
     val consumedToken = reservedToken.consume
     consumedToken shouldNot be(null)
   }
 
   test("givenATokenRegistryAndAReservedTokenWhenConsumeThenAConsumedTokenShouldBeRegisteredInTheTokenRegistry") {
-    val reservedToken = new ReservedToken(Token(value = 1L, expiration = LocalDateTime.now.plusDays(1), user), user, tokenRegistry)
+    val reservedToken = new ReservedRentToken(new RentToken(value = 1L, expiration = LocalDateTime.now.plusDays(1), user), user, tokenRegistry)
     val consumedToken = reservedToken.consume
     tokenRegistry.consumedTokens should contain(consumedToken)
   }

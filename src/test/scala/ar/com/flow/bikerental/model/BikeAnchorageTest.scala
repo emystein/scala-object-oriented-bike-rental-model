@@ -2,7 +2,7 @@ package ar.com.flow.bikerental.model
 
 import java.time.{LocalDateTime, Period}
 
-import ar.com.flow.bikerental.model.token.{ReservedToken, Token, TokenGenerator, TokenRegistry}
+import ar.com.flow.bikerental.model.token.{ReservedRentToken, RentToken, TokenGenerator, TokenRegistry}
 import ar.com.flow.bikerental.model.trip.completion.{SuccessResult, TripCompletionRules, TripCompletionRulesFactory}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.funsuite.AnyFunSuite
@@ -16,7 +16,7 @@ class BikeAnchorageTest extends AnyFunSuite with TestObjects with BeforeAndAfter
   private var trips: TripRegistry = null
   private var station: BikeStation = null
   private var anchorage: BikeAnchorage = null
-  private var reservedRentToken1: ReservedToken = null
+  private var reservedRentToken1: ReservedRentToken = null
 
   override protected def beforeEach(): Unit = {
     tokenRegistry = TokenRegistry(new TokenGenerator(new Random))
@@ -67,7 +67,7 @@ class BikeAnchorageTest extends AnyFunSuite with TestObjects with BeforeAndAfter
 
   test("givenABikeAnchorageWithAParkedBikeWhenRetrieveTheBikeUsingAnExpiredTokenThenTheAnchorageShouldNotReleaseTheBike") {
     anchorage.parkBike(bike1)
-    val expiredToken = new ReservedToken(new Token(owner = user, expiration = LocalDateTime.now.minusDays(1)), user, tokenRegistry)
+    val expiredToken = new ReservedRentToken(new RentToken(owner = user, expiration = LocalDateTime.now.minusDays(1)), user, tokenRegistry)
 
     assertThrows[IllegalArgumentException] {
       anchorage.releaseBike(expiredToken)

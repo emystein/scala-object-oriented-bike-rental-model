@@ -1,6 +1,6 @@
 package ar.com.flow.bikerental.model
 
-import ar.com.flow.bikerental.model.token.{ReservedToken, TokenGenerator, TokenRegistry}
+import ar.com.flow.bikerental.model.token.{ReservedRentToken, TokenGenerator, TokenRegistry}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
@@ -9,7 +9,7 @@ import scala.util.Random
 
 class BikePickUpEventTest extends AnyFunSuite with TestObjects with BeforeAndAfterEach with Matchers {
   private var tokenRegistry: TokenRegistry = null
-  private var reservedToken: ReservedToken = null
+  private var reservedToken: ReservedRentToken = null
 
   override protected def beforeEach(): Unit = {
     tokenRegistry = TokenRegistry(new TokenGenerator(new Random))

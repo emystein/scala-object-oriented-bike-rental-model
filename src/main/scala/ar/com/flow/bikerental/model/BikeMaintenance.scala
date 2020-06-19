@@ -1,5 +1,7 @@
 package ar.com.flow.bikerental.model
 
+import ar.com.flow.bikerental.model.token.Token
+
 class BikeShop {
   def getMaintenancePickupToken(maintenanceRequest: Option[BikeMaintenanceRequest]): Option[BikeMaintenanceToken] = {
     maintenanceRequest.map{r => maintenanceRequestsProcessed = maintenanceRequestsProcessed :+ r; BikeMaintenanceToken(r.bike)}
@@ -18,4 +20,5 @@ class BikeShop {
 
 case class BikeMaintenanceRequest(bike: Bike)
 
-case class BikeMaintenanceToken(bike: Bike)
+case class BikeMaintenanceToken(bike: Bike) extends Token
+

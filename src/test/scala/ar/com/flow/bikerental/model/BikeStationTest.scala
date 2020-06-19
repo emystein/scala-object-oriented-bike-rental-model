@@ -1,6 +1,6 @@
 package ar.com.flow.bikerental.model
 
-import ar.com.flow.bikerental.model.token.{ReservedToken, TokenGenerator, TokenRegistry}
+import ar.com.flow.bikerental.model.token.{ReservedRentToken, TokenGenerator, TokenRegistry}
 import ar.com.flow.bikerental.model.trip.completion.TripCompletionRulesFactory
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.funsuite.AnyFunSuite
@@ -12,7 +12,7 @@ class BikeStationTest extends AnyFunSuite with TestObjects with BeforeAndAfterEa
   private val tokenRegistry = TokenRegistry(new TokenGenerator(new Random))
   private var bikeShop: BikeShop = null
   private var trips: TripRegistry = null
-  private var reservedToken: ReservedToken = null
+  private var reservedToken: ReservedRentToken = null
 
   override protected def beforeEach(): Unit = {
     reservedToken = tokenRegistry.reserveTokenForUser(user)

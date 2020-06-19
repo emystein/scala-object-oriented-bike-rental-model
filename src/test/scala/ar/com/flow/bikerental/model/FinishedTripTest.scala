@@ -3,7 +3,7 @@ package ar.com.flow.bikerental.model
 import java.time.{Duration, LocalDateTime}
 import java.time.LocalDateTime.now
 
-import ar.com.flow.bikerental.model.token.{ReservedToken, Token, TokenGenerator, TokenRegistry}
+import ar.com.flow.bikerental.model.token.{ReservedRentToken, RentToken, TokenGenerator, TokenRegistry}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
@@ -16,7 +16,7 @@ class FinishedTripTest extends AnyFunSuite with TestObjects with BeforeAndAfterE
 
   override protected def beforeEach(): Unit = {
     val tokenRegistry = TokenRegistry(new TokenGenerator(new Random))
-    val reservedToken = new ReservedToken(new Token(1L, now.plusDays(1),  user), user, tokenRegistry)
+    val reservedToken = new ReservedRentToken(new RentToken(1L, now.plusDays(1),  user), user, tokenRegistry)
     bikePickup = BikePickUpEvent(bike1, reservedToken)
   }
 

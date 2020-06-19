@@ -6,5 +6,5 @@ import java.time.LocalDateTime.now
 import scala.util.Random
 
 class TokenGenerator(val random: Random) {
-  def generateTokenValidForPeriod(period: Period) = new Token(value = random.nextLong, expiration = now.plus(period), null)
+  def generateTokenValidForPeriod(period: Period) = new RentToken(value = random.nextLong, expiration = now.plus(period), null)
 }

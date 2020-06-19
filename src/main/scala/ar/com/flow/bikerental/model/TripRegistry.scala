@@ -2,7 +2,7 @@ package ar.com.flow.bikerental.model
 
 import java.time.LocalDateTime.now
 
-import ar.com.flow.bikerental.model.token.ReservedToken
+import ar.com.flow.bikerental.model.token.ReservedRentToken
 import ar.com.flow.bikerental.model.trip.completion.{TripCompletionRules, TripResult}
 
 import scala.collection.mutable
@@ -10,7 +10,7 @@ import scala.collection.mutable
 case class TripRegistry(tripCompletionRules: TripCompletionRules) {
   private val tripsByBike = new mutable.HashMap[Bike, Trip]
 
-  def startTrip(bike: Bike, reservedToken: ReservedToken): Trip = {
+  def startTrip(bike: Bike, reservedToken: ReservedRentToken): Trip = {
     val pickUp = BikePickUpEvent(bike, reservedToken)
     val trip = Trip(pickUp)
     tripsByBike.put(bike, trip)
