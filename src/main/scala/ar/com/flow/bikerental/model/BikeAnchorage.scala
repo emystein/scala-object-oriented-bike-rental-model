@@ -1,6 +1,7 @@
 package ar.com.flow.bikerental.model
 
 import ar.com.flow.bikerental.model.token.{ReservedRentToken, Token}
+import ar.com.flow.bikerental.model.trip.completion.TripResult
 
 class BikeAnchorage(val trips: TripRegistry, bikeShop: BikeShop = new BikeShop()) {
   var parkedBike: Option[Bike] = None
@@ -9,7 +10,7 @@ class BikeAnchorage(val trips: TripRegistry, bikeShop: BikeShop = new BikeShop()
    * @throws IllegalStateException if there is a previously parked Bike.
    * @return a { @link CompletedTrip} wrapped in an { @link Optional}
    */
-  def parkBike(bike: Bike) = {
+  def parkBike(bike: Bike): Option[TripResult] = {
     require(parkedBike.isEmpty, "There is already a parked bike here.")
     parkedBike = Some(bike)
     trips.finishCurrentTripForBike(bike)

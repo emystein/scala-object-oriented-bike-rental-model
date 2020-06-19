@@ -37,6 +37,7 @@ class BikeMaintenanceTest extends AnyWordSpec with TestObjects with BeforeAndAft
     "pickup bike for maintenance" should {
       "release the bike" in {
         anchorage.parkBike(bike1)
+        bikeShop.requestMaintenance(Some(bike1))
         val bike = pickupBikeForMaintenance(bike1)
         bike shouldBe Some(bike1)
         anchorage.parkedBike shouldBe None
@@ -47,16 +48,31 @@ class BikeMaintenanceTest extends AnyWordSpec with TestObjects with BeforeAndAft
     "pickup bike for maintenance" should {
       "not release the bike" in {
         anchorage.parkBike(bike1)
+        bikeShop.requestMaintenance(Some(bike1))
         val bike = pickupBikeForMaintenance(bike2)
         bike shouldBe None
         anchorage.parkedBike shouldBe Some(bike1)
       }
     }
   }
+  "Bike Shop with active maintenance requests" when {
+    "request next maintenance pickup token" should {
+      "deliver token" in {
+        bikeShop.requestMaintenance(Some(bike1))
+
+        bikeShop.nextMaintenancePickupToken shouldBe Some(BikeMaintenanceToken(bike1))
+      }
+    }
+  }
+  "Bike Shop without active maintenance requests" when {
+    "request next maintenance pickup token" should {
+      "deliver none" in {
+        bikeShop.nextMaintenancePickupToken shouldBe None
+      }
+    }
+  }
 
   private def pickupBikeForMaintenance(bikeToPickup: Bike): Option[Bike] = {
-    val maintenanceRequest = Some(BikeMaintenanceRequest(bikeToPickup))
-    val pickupToken = bikeShop.getMaintenancePickupToken(maintenanceRequest)
-    anchorage.releaseBike(pickupToken.get)
+    bikeShop.nextMaintenancePickupToken.filter(_.bike == bikeToPickup).flatMap(anchorage.releaseBike(_))
   }
 }
