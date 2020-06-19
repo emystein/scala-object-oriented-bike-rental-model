@@ -39,6 +39,7 @@ class BikeMaintenanceTest extends AnyWordSpec with TestObjects with BeforeAndAft
         anchorage.parkBike(bike1)
         val bike = pickupBikeForMaintenance(bike1)
         bike shouldBe Some(bike1)
+        anchorage.parkedBike shouldBe None
       }
     }
   }
@@ -48,6 +49,7 @@ class BikeMaintenanceTest extends AnyWordSpec with TestObjects with BeforeAndAft
         anchorage.parkBike(bike1)
         val bike = pickupBikeForMaintenance(bike2)
         bike shouldBe None
+        anchorage.parkedBike shouldBe Some(bike1)
       }
     }
   }
