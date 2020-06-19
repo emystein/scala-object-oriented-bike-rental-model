@@ -29,7 +29,9 @@ class BikeAnchorage(val trips: TripRegistry, bikeShop: BikeShop = new BikeShop()
     token match {
       case reservedToken@ReservedRentToken(_, owner, _) =>
         require(!owner.isBanned, "The user is banned.")
-        releaseParkedBike().map(bike => trips.startTrip(bike, reservedToken)).map(_.pickUp.bike)
+        releaseParkedBike(parked => !bikeShop.maintenancePickupRequests.exists(r => r.bike == parked))
+          .map(bike => trips.startTrip(bike, reservedToken))
+          .map(_.pickUp.bike)
       case BikeMaintenanceToken(bike) =>
         releaseParkedBike(parked => parked == bike)
     }

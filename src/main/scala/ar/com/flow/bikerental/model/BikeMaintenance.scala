@@ -3,14 +3,6 @@ package ar.com.flow.bikerental.model
 import ar.com.flow.bikerental.model.token.Token
 
 class BikeShop {
-  def nextMaintenancePickupToken() : Option[BikeMaintenanceToken] = {
-    getMaintenancePickupToken(maintenancePickupRequests.headOption)
-  }
-
-  private def getMaintenancePickupToken(maintenanceRequest: Option[BikeMaintenanceRequest]): Option[BikeMaintenanceToken] = {
-    maintenanceRequest.map{r => maintenanceRequestsProcessed = maintenanceRequestsProcessed :+ r; BikeMaintenanceToken(r.bike)}
-  }
-
   var maintenancePickupRequests: List[BikeMaintenanceRequest] = Nil
 
   var maintenanceRequestsProcessed: List[BikeMaintenanceRequest] = Nil
@@ -19,6 +11,10 @@ class BikeShop {
     maybeBike
       .map(bike => BikeMaintenanceRequest(bike))
       .map{pickup => maintenancePickupRequests = maintenancePickupRequests :+ pickup; pickup}
+  }
+
+  def nextMaintenancePickupToken() : Option[BikeMaintenanceToken] = {
+    maintenancePickupRequests.headOption.map{r => maintenanceRequestsProcessed = maintenanceRequestsProcessed :+ r; BikeMaintenanceToken(r.bike)}
   }
 }
 

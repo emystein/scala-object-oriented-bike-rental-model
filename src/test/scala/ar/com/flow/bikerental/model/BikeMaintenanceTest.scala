@@ -31,6 +31,11 @@ class BikeMaintenanceTest extends AnyWordSpec with TestObjects with BeforeAndAft
         anchorage.requestBikeMaintenance()
         bikeShop.maintenancePickupRequests should contain(BikeMaintenanceRequest(bike1))
       }
+      "reject bike pickup for trip" in {
+        anchorage.parkBike(bike1)
+        anchorage.requestBikeMaintenance()
+        anchorage.releaseBike(reservedRentToken1) shouldBe None
+      }
     }
   }
   "Anchorage with parked bike and Maintenance Token for parked bike" when {
