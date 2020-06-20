@@ -6,6 +6,8 @@ import ar.com.flow.bikerental.model.trip.completion.TripResult
 class BikeAnchorage(val trips: TripRegistry, bikeShop: BikeShop = new BikeShop()) {
   var parkedBike: Option[Bike] = None
 
+  def isLocked = parkedBike.isDefined
+
   /**
    * @throws IllegalStateException if there is a previously parked Bike.
    * @return a { @link CompletedTrip} wrapped in an { @link Optional}
@@ -15,8 +17,6 @@ class BikeAnchorage(val trips: TripRegistry, bikeShop: BikeShop = new BikeShop()
     parkedBike = Some(bike)
     trips.finishCurrentTripForBike(bike)
   }
-
-  def isLocked = parkedBike.isDefined
 
   /**
    * Given a {@link Token}, consumes the token and releases the {@link Bike}.
@@ -37,7 +37,8 @@ class BikeAnchorage(val trips: TripRegistry, bikeShop: BikeShop = new BikeShop()
     }
   }
 
-  def requestBikeMaintenance(): Option[BikeMaintenanceRequest] = bikeShop.requestMaintenance(parkedBike)
+  def requestBikeMaintenance(): Option[BikeMaintenanceRequest] =
+    parkedBike.map(bike => bikeShop.requestMaintenance(bike))
 
   private def releaseParkedBikeIf(filter: Bike => Boolean = _ => true): Option[Bike] = {
     val releasedBike = parkedBike.filter(filter)

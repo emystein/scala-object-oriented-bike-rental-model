@@ -7,14 +7,17 @@ class BikeShop {
 
   var maintenanceRequestsProcessed: List[BikeMaintenanceRequest] = Nil
 
-  def requestMaintenance(maybeBike: Option[Bike]): Option[BikeMaintenanceRequest] = {
-    maybeBike
-      .map(bike => BikeMaintenanceRequest(bike))
-      .map{pickup => maintenancePickupRequests = maintenancePickupRequests :+ pickup; pickup}
+  def requestMaintenance(bike: Bike): BikeMaintenanceRequest = {
+    maintenancePickupRequests = BikeMaintenanceRequest(bike) :: maintenancePickupRequests
+    maintenancePickupRequests.head
   }
 
   def nextMaintenancePickupToken() : Option[BikeMaintenanceToken] = {
-    maintenancePickupRequests.headOption.map{r => maintenanceRequestsProcessed = maintenanceRequestsProcessed :+ r; BikeMaintenanceToken(r.bike)}
+    maintenancePickupRequests.headOption.map{ request =>
+      maintenanceRequestsProcessed = maintenanceRequestsProcessed :+ request
+      maintenancePickupRequests = maintenancePickupRequests.tail
+      BikeMaintenanceToken(request.bike)
+    }
   }
 }
 
