@@ -26,6 +26,6 @@ class ReservedRentTokenTest extends AnyFunSuite with BeforeAndAfterEach with Mat
   test("givenATokenRegistryAndAReservedTokenWhenConsumeThenAConsumedTokenShouldBeRegisteredInTheTokenRegistry") {
     val reservedToken = new ReservedRentToken(new RentToken(value = 1L, expiration = LocalDateTime.now.plusDays(1), user), user, tokenRegistry)
     val consumedToken = reservedToken.consume
-    tokenRegistry.consumedTokens should contain(consumedToken)
+    tokenRegistry.consumedTokens.getAll() should contain(consumedToken)
   }
 }
