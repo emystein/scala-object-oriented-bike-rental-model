@@ -6,4 +6,5 @@ trait ConsumedRentTokenRepository {
   def save(token: ConsumedRentToken)
   def getAll(): util.Collection[ConsumedRentToken]
   def contains(token: ConsumedRentToken): Boolean
+  def deleteAll(): Unit
 }

@@ -10,4 +10,6 @@ class InMemoryRentTokenRepository extends RentTokenRepository {
   override def save(token: RentToken): Unit = tokensByUser.put(token.owner, token)
 
   override def getAllByUser(user: User): util.Collection[RentToken] = tokensByUser.get(user)
+
+  override def deleteAll(): Unit = tokensByUser.clear()
 }

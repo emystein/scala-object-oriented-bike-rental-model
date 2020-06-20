@@ -15,7 +15,7 @@ class FinishedTripTest extends AnyFunSuite with TestObjects with BeforeAndAfterE
   private var bikeDropOff: LocalDateTime = now
 
   override protected def beforeEach(): Unit = {
-    val tokenRegistry = TokenRegistry(new TokenGenerator(new Random))
+    tokenRegistry.deleteAll()
     val reservedToken = new ReservedRentToken(new RentToken(1L, now.plusDays(1),  user), user, tokenRegistry)
     bikePickup = BikePickUpEvent(bike1, reservedToken)
   }

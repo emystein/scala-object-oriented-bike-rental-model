@@ -17,7 +17,7 @@ class TripCompletionRulesTest extends AnyFunSuite with TestObjects with BeforeAn
   private var reservedToken: ReservedRentToken = null
 
   override protected def beforeEach(): Unit = {
-    val tokenRegistry = TokenRegistry(new TokenGenerator(new Random))
+    tokenRegistry.deleteAll
     reservedToken = new ReservedRentToken(new RentToken(value=1L, expiration = now.plusDays(1), user), user, tokenRegistry)
   }
 

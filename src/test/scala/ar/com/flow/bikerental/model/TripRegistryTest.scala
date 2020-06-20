@@ -9,12 +9,11 @@ import org.scalatest.matchers.should.Matchers
 import scala.util.Random
 
 class TripRegistryTest extends AnyFunSuite with TestObjects with BeforeAndAfterEach with Matchers {
-  private var tokenRegistry: TokenRegistry = null
   private var reservedToken: ReservedRentToken = null
   private var trips: TripRegistry = null
 
   override protected def beforeEach(): Unit = {
-    tokenRegistry = TokenRegistry(new TokenGenerator(new Random))
+
     reservedToken = tokenRegistry.reserveTokenForUser(user)
     trips = TripRegistry(tripCompletionRules)
   }

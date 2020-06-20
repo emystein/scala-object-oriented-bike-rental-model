@@ -8,7 +8,6 @@ import org.scalatest.wordspec.AnyWordSpec
 import scala.util.Random
 
 class BikeMaintenanceTest extends AnyWordSpec with TestObjects with BeforeAndAfterEach with Matchers {
-  private var tokenRegistry: TokenRegistry = null
   private var bikeShop: BikeShop = null
   private var trips: TripRegistry = null
   private var station: BikeStation = null
@@ -16,7 +15,6 @@ class BikeMaintenanceTest extends AnyWordSpec with TestObjects with BeforeAndAft
   private var reservedRentToken1: ReservedRentToken = null
 
   override protected def beforeEach(): Unit = {
-    tokenRegistry = TokenRegistry(new TokenGenerator(new Random))
     reservedRentToken1 = tokenRegistry.reserveTokenForUser(user)
     bikeShop = new BikeShop()
     trips = TripRegistry(tripCompletionRules)

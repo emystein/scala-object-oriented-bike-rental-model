@@ -9,7 +9,6 @@ import org.scalatest.matchers.should.Matchers
 import scala.util.Random
 
 class EmptyBikeAnchorageTest extends AnyFunSuite with TestObjects with BeforeAndAfterEach with Matchers {
-  private var tokenRegistry: TokenRegistry = null
   private var bikeShop: BikeShop = null
   private var trips: TripRegistry = null
   private var station: BikeStation = null
@@ -17,7 +16,6 @@ class EmptyBikeAnchorageTest extends AnyFunSuite with TestObjects with BeforeAnd
   private var reservedRentToken1: ReservedRentToken = null
 
   override protected def beforeEach(): Unit = {
-    tokenRegistry = TokenRegistry(new TokenGenerator(new Random))
     reservedRentToken1 = tokenRegistry.reserveTokenForUser(user)
     bikeShop = new BikeShop()
     trips = new TripRegistry(tripCompletionRules)

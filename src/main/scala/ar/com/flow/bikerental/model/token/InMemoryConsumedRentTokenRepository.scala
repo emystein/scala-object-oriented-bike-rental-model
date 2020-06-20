@@ -10,4 +10,6 @@ class InMemoryConsumedRentTokenRepository extends ConsumedRentTokenRepository {
   override def getAll(): util.Collection[ConsumedRentToken] = consumedTokens
 
   override def contains(token: ConsumedRentToken): Boolean = consumedTokens.contains(token)
+
+  override def deleteAll(): Unit = consumedTokens.clear()
 }

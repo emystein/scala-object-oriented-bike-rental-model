@@ -9,7 +9,7 @@ import org.scalatest.matchers.should.Matchers
 import scala.util.Random
 
 class BikeStationTest extends AnyFunSuite with TestObjects with BeforeAndAfterEach with Matchers {
-  private val tokenRegistry = TokenRegistry(new TokenGenerator(new Random))
+
   private var bikeShop: BikeShop = null
   private var trips: TripRegistry = null
   private var reservedToken: ReservedRentToken = null

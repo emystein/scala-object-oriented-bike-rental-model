@@ -1,20 +1,15 @@
 package ar.com.flow.bikerental.model.token
 
 import java.time.LocalDateTime
-import java.time.LocalDateTime.now
-import java.util.Random
 
-import ar.com.flow.bikerental.model.User
+import ar.com.flow.bikerental.model.TestObjects
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
-class ReservedRentTokenTest extends AnyFunSuite with BeforeAndAfterEach with Matchers {
-  private val user: User = User("1", "Emiliano Menéndez")
-  private var tokenRegistry: TokenRegistry = null
-
+class ReservedRentTokenTest extends AnyFunSuite with TestObjects with BeforeAndAfterEach with Matchers {
   override protected def beforeEach(): Unit = {
-    tokenRegistry = TokenRegistry(new TokenGenerator(new Random))
+    tokenRegistry.deleteAll()
   }
 
   test("givenAReservedTokenWhenConsumeThenAConsumedTokenShouldBeCreated") {
