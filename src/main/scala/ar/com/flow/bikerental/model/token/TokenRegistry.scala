@@ -6,7 +6,9 @@ import java.util
 
 import ar.com.flow.bikerental.model.User
 
-case class TokenRegistry(tokenGenerator: TokenGenerator,tokensByUser: RentTokenRepository, consumedTokens: ConsumedRentTokenRepository) {
+case class TokenRegistry(tokenGenerator: TokenGenerator,
+                         tokensByUser: RentTokenRepository,
+                         consumedTokens: ConsumedRentTokenRepository) {
   def reserveTokenForUser(user: User): ReservedRentToken = {
     val token = tokenGenerator.generateTokenValidForPeriod(Period.ofDays(1))
     val reservedToken = new ReservedRentToken(token, user, this)
@@ -14,7 +16,7 @@ case class TokenRegistry(tokenGenerator: TokenGenerator,tokensByUser: RentTokenR
     reservedToken
   }
 
-  def consumeToken(token: ReservedRentToken) = {
+  def consumeToken(token: ReservedRentToken): ConsumedRentToken = {
     require(!token.hasExpired, "Can't consume expired token.")
     val consumedToken = new ConsumedRentToken(token, consumedAt = now())
     require(!consumedTokens.contains(consumedToken), "Can't consume token more than once.")

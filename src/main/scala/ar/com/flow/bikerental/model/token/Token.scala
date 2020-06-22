@@ -19,10 +19,9 @@ class RentToken(val value: Long = 0L, var expiration: LocalDateTime, val owner: 
 case class ReservedRentToken(token: RentToken, user: User, tokenRegistry: TokenRegistry) extends RentToken(token.value, token.expiration, user) {
   val reservedAt: LocalDateTime = now
 
-  def setExpiration(date: LocalDateTime) = expiration = date
+  def setExpiration(date: LocalDateTime): Unit = expiration = date
   def consume: ConsumedRentToken = tokenRegistry.consumeToken(this)
 }
 
 class ConsumedRentToken(val token: ReservedRentToken, val consumedAt: LocalDateTime) extends RentToken(token.value, token.expiration, token.owner)
-
 
