@@ -1,6 +1,7 @@
 package ar.com.flow.bikerental.model.token
 
 import java.time.LocalDateTime.now
+import java.time.Period
 import java.util.Random
 
 import ar.com.flow.bikerental.model.{TestObjects, User}
@@ -8,6 +9,13 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
 class TokenRegistryTest extends AnyFunSuite with TestObjects with Matchers {
+  test("givenATokenGeneratorWhenGeneratingANewTokenThenTheGeneratedTokenShouldBeValid") {
+    val token = tokenRegistry.generateTokenValidForPeriod(Period.ofDays(1), user)
+    token.value shouldNot be(null)
+    token.hasExpired shouldBe false
+    token.owner shouldBe user
+  }
+
   test("givenARegistryWhenReservingATokenThenTheTokenShouldBePresent") {
     val reservedToken = tokenRegistry.reserveTokenForUser(user)
     reservedToken shouldNot be(null)

@@ -1,15 +1,11 @@
 package ar.com.flow.bikerental.model
 
-import java.time.{Duration, LocalDateTime}
 import java.time.LocalDateTime.now
+import java.time.{Duration, LocalDateTime}
 
-import ar.com.flow.bikerental.model.token.{RentToken, ReservedRentToken, TokenGenerator, TokenRegistry}
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-
-import scala.util.Random
 
 class FinishedTripTest extends AnyWordSpec with TestObjects with BeforeAndAfterEach with Matchers {
   private var bikePickup: BikePickUpEvent = null
@@ -17,7 +13,6 @@ class FinishedTripTest extends AnyWordSpec with TestObjects with BeforeAndAfterE
 
   override protected def beforeEach(): Unit = {
     tokenRegistry.deleteAll()
-    val reservedToken = ReservedRentToken(new RentToken(1L, now.plusDays(1),  user), user, tokenRegistry)
     bikePickup = BikePickUpEvent(bike1, reservedToken)
   }
 

@@ -12,14 +12,32 @@ class ReservedRentTokenTest extends AnyFunSuite with TestObjects with BeforeAndA
     tokenRegistry.deleteAll()
   }
 
+  test("givenATransactionTokenWithExpirationDateInTheFutureWhenValidatingItThenItShouldBeValid") {
+    val notExpiredToken = new ReservedRentToken(value = "1", expiration = LocalDateTime.now.plusDays(1), owner = user, tokenRegistry = tokenRegistry)
+    notExpiredToken.hasExpired shouldBe false
+  }
+
+  test("givenATransactionTokenWithExpirationDateInThePastWhenValidatingItThenItShouldBeInvalid") {
+    val expiredToken = new ReservedRentToken(value = "1", expiration = LocalDateTime.now.minusDays(1), owner = user, tokenRegistry = tokenRegistry)
+    expiredToken.hasExpired shouldBe true
+  }
+
+  test("equals") {
+    val token1 = new ReservedRentToken(value = "1", expiration = LocalDateTime.now.plusDays(1), owner = user, tokenRegistry = tokenRegistry)
+    val token2 = new ReservedRentToken(value = "2", expiration = LocalDateTime.now.plusDays(1), owner = user, tokenRegistry = tokenRegistry)
+
+    token1 shouldBe token1
+    token2 shouldNot be(token1)
+  }
+  
   test("givenAReservedTokenWhenConsumeThenAConsumedTokenShouldBeCreated") {
-    val reservedToken = new ReservedRentToken(new RentToken(value = 1L, expiration = LocalDateTime.now.plusDays(1), user), user, tokenRegistry)
+    val reservedToken = ReservedRentToken(expiration = LocalDateTime.now.plusDays(1), owner = user, tokenRegistry = tokenRegistry)
     val consumedToken = reservedToken.consume
     consumedToken shouldNot be(null)
   }
 
   test("givenATokenRegistryAndAReservedTokenWhenConsumeThenAConsumedTokenShouldBeRegisteredInTheTokenRegistry") {
-    val reservedToken = new ReservedRentToken(new RentToken(value = 1L, expiration = LocalDateTime.now.plusDays(1), user), user, tokenRegistry)
+    val reservedToken = ReservedRentToken(expiration = LocalDateTime.now.plusDays(1), owner = user, tokenRegistry = tokenRegistry)
     val consumedToken = reservedToken.consume
     tokenRegistry.consumedTokens.getAll() should contain(consumedToken)
   }

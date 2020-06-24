@@ -2,26 +2,32 @@ package ar.com.flow.bikerental.model.token
 
 import java.time.LocalDateTime
 import java.time.LocalDateTime.now
+
 import ar.com.flow.bikerental.model.User
 
-abstract class Token
+trait Token {
+  val value: String = "0"
+  var expiration: LocalDateTime
+  val owner: User
+}
 
-class RentToken(val value: Long = 0L, var expiration: LocalDateTime, val owner: User) extends Token {
+case class ReservedRentToken(override val value: String = "0", override var expiration: LocalDateTime, override val owner: User, tokenRegistry: TokenRegistry) extends Token {
+  val reservedAt: LocalDateTime = now
+  def setExpiration(dateTime: LocalDateTime): Unit = expiration = dateTime
   def hasExpired: Boolean = now.isAfter(expiration)
-
-  override def equals(obj: Any): Boolean = obj.isInstanceOf[RentToken] && obj.asInstanceOf[RentToken].value == value
-
+  def consume: ConsumedRentToken = tokenRegistry.consumeToken(this)
+  override def equals(obj: Any): Boolean = obj.isInstanceOf[ReservedRentToken] && obj.asInstanceOf[ReservedRentToken].value == value
   override def hashCode(): Int = {
-    value.toInt
+    value.hashCode
   }
 }
 
-case class ReservedRentToken(token: RentToken, user: User, tokenRegistry: TokenRegistry) extends RentToken(token.value, token.expiration, user) {
-  val reservedAt: LocalDateTime = now
-
-  def setExpiration(date: LocalDateTime): Unit = expiration = date
-  def consume: ConsumedRentToken = tokenRegistry.consumeToken(this)
+class ConsumedRentToken(val token: ReservedRentToken, val consumedAt: LocalDateTime) extends Token {
+  override val value: String = token.value
+  override var expiration: LocalDateTime = token.expiration
+  override val owner: User = token.owner
+  override def equals(obj: Any): Boolean = obj.isInstanceOf[ConsumedRentToken] && obj.asInstanceOf[ConsumedRentToken].value == value
+  override def hashCode(): Int = {
+    value.hashCode
+  }
 }
-
-class ConsumedRentToken(val token: ReservedRentToken, val consumedAt: LocalDateTime) extends RentToken(token.value, token.expiration, token.owner)
-

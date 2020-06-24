@@ -1,18 +1,12 @@
 package ar.com.flow.bikerental.model
 
-import ar.com.flow.bikerental.model.token.{ReservedRentToken, TokenGenerator, TokenRegistry}
-import ar.com.flow.bikerental.model.trip.completion.TripCompletionRulesFactory
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
-import scala.util.Random
-
 class BikeStationTest extends AnyFunSuite with TestObjects with BeforeAndAfterEach with Matchers {
-
   private var bikeShop: BikeShop = null
   private var trips: TripRegistry = null
-  private var reservedToken: ReservedRentToken = null
 
   override protected def beforeEach(): Unit = {
     reservedToken = tokenRegistry.reserveTokenForUser(user)
@@ -77,6 +71,26 @@ class BikeStationTest extends AnyFunSuite with TestObjects with BeforeAndAfterEa
     // try to use valid rent token for the second time
     bike = bikeStation.pickupAvailableBike(reservedToken)
     bike shouldNot be(defined)
+  }
+
+  test("givenAValidAnchorageWhenGetAnchorageByIdItShouldBePresent") {
+    val bikeStation = new BikeStation(2, trips, bikeShop)
+    bikeStation.getAnchorageById(1) should be(defined)
+    bikeStation.getAnchorageById(2) should be(defined)
+  }
+
+  test("givenAnInvalidAnchorageIdWhenGetAnchorageByIdItShouldThrowAnException") {
+    val bikeStation = new BikeStation(2, trips, bikeShop)
+
+    assertThrows[IllegalArgumentException](
+      bikeStation.getAnchorageById(0)
+    )
+  }
+
+  test("givenAnAnchorageIdGreaterThanPresentWhenGetAnchorageByIdItShouldReturnNone") {
+    val bikeStation = new BikeStation(2, trips, bikeShop)
+
+    bikeStation.getAnchorageById(3) shouldNot be(defined)
   }
 
   private def fillStationWithBikes(bikeStation: BikeStation) = bikeStation.bikeAnchorages.foreach(_.parkBike(new Bike))

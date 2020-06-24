@@ -2,13 +2,10 @@ package ar.com.flow.bikerental.model
 
 import java.time.{LocalDateTime, Period}
 
-import ar.com.flow.bikerental.model.token.{ReservedRentToken, RentToken, TokenGenerator, TokenRegistry}
-import ar.com.flow.bikerental.model.trip.completion.{SuccessResult, TripCompletionRules, TripCompletionRulesFactory}
+import ar.com.flow.bikerental.model.token.ReservedRentToken
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
-
-import scala.util.Random
 
 class BikeAnchorageTest extends AnyFunSuite with TestObjects with BeforeAndAfterEach with Matchers {
   private var bikeShop: BikeShop = null
@@ -65,7 +62,6 @@ class BikeAnchorageTest extends AnyFunSuite with TestObjects with BeforeAndAfter
 
   test("givenABikeAnchorageWithAParkedBikeWhenRetrieveTheBikeUsingAnExpiredTokenThenTheAnchorageShouldNotReleaseTheBike") {
     anchorage.parkBike(bike1)
-    val expiredToken = new ReservedRentToken(new RentToken(owner = user, expiration = LocalDateTime.now.minusDays(1)), user, tokenRegistry)
 
     assertThrows[IllegalArgumentException] {
       anchorage.releaseBike(expiredToken)

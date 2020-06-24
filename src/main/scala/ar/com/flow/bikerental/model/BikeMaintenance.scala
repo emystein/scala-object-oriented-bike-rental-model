@@ -1,5 +1,7 @@
 package ar.com.flow.bikerental.model
 
+import java.time.LocalDateTime
+
 import ar.com.flow.bikerental.model.token.Token
 
 class BikeShop {
@@ -23,5 +25,8 @@ class BikeShop {
 
 case class BikeMaintenanceRequest(bike: Bike)
 
-case class BikeMaintenanceToken(bike: Bike) extends Token
+case class BikeMaintenanceToken(bike: Bike) extends Token {
+  override var expiration: LocalDateTime = LocalDateTime.now().plusWeeks(1)
+  override val owner: User = User("-1", "BikeShop")
+}
 

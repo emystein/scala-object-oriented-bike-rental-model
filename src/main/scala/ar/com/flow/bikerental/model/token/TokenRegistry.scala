@@ -6,14 +6,22 @@ import java.util
 
 import ar.com.flow.bikerental.model.User
 
-case class TokenRegistry(tokenGenerator: TokenGenerator,
-                         tokensByUser: RentTokenRepository,
+import scala.util.Random
+
+case class TokenRegistry(random: Random = new Random,
+                         tokensByUser: ReservedRentTokenRepository,
                          consumedTokens: ConsumedRentTokenRepository) {
+
+  def generateTokenValidForPeriod(period: Period, owner: User) = ReservedRentToken(value = random.nextString(30), expiration = now.plus(period), owner, this)
+
   def reserveTokenForUser(user: User): ReservedRentToken = {
-    val token = tokenGenerator.generateTokenValidForPeriod(Period.ofDays(1))
-    val reservedToken = new ReservedRentToken(token, user, this)
+    val reservedToken = generateTokenValidForPeriod(Period.ofDays(1), user)
     tokensByUser.save(reservedToken)
     reservedToken
+  }
+
+  def getTokenByValue(value: String): Option[ReservedRentToken] = {
+    tokensByUser.getByValue(value)
   }
 
   def consumeToken(token: ReservedRentToken): ConsumedRentToken = {
@@ -24,7 +32,7 @@ case class TokenRegistry(tokenGenerator: TokenGenerator,
     consumedToken
   }
 
-  def tokensOf(user: User): util.Collection[RentToken] = tokensByUser.getAllByUser(user)
+  def tokensOf(user: User): util.Collection[ReservedRentToken] = tokensByUser.getAllByUser(user)
 
   def deleteAll(): Unit = {
     tokensByUser.deleteAll()

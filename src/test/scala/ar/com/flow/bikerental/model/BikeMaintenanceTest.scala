@@ -1,6 +1,6 @@
 package ar.com.flow.bikerental.model
 
-import ar.com.flow.bikerental.model.token.{ReservedRentToken, TokenGenerator, TokenRegistry}
+import ar.com.flow.bikerental.model.token.{ReservedRentToken, TokenRegistry}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
