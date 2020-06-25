@@ -17,7 +17,7 @@ class EmptyBikeAnchorageTest extends AnyWordSpec with TestObjects with BeforeAnd
     reservedRentToken1 = tokenRegistry.reserveTokenForUser(user)
     bikeShop = new BikeShop()
     trips = new TripRegistry(tripCompletionRules)
-    station = new BikeStation(1, trips, bikeShop)
+    station = new BikeStation("1", numberOfBikeAnchorages = 1, trips, bikeShop)
     anchorage = station.getFreeSpots.iterator.next
   }
 
