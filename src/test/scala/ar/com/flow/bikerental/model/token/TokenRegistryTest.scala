@@ -64,4 +64,12 @@ class TokenRegistryTest extends AnyFunSuite with TestObjects with Matchers {
       tokenRegistry.consumeToken(reservedToken)
     }
   }
+
+  test("givenATokenStoredInTheRegistryWhenGetTokenByValueThenTheRegistryShouldReturnToken") {
+    val reservedToken = tokenRegistry.reserveTokenForUser(user)
+
+    val tokenByValue = tokenRegistry.getTokenByValue(reservedToken.value)
+
+    tokenByValue shouldBe Some(reservedToken)
+  }
 }

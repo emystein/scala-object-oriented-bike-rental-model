@@ -12,7 +12,7 @@ case class TokenRegistry(random: Random = new Random,
                          tokensByUser: ReservedRentTokenRepository,
                          consumedTokens: ConsumedRentTokenRepository) {
 
-  def generateTokenValidForPeriod(period: Period, owner: User) = ReservedRentToken(value = random.nextString(30), expiration = now.plus(period), owner, this)
+  def generateTokenValidForPeriod(period: Period, owner: User) = ReservedRentToken(value = random.nextLong(10).toString, expiration = now.plus(period), owner, this)
 
   def reserveTokenForUser(user: User): ReservedRentToken = {
     val reservedToken = generateTokenValidForPeriod(Period.ofDays(1), user)
