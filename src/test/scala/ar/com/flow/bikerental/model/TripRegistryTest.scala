@@ -9,7 +9,6 @@ class TripRegistryTest extends AnyFunSuite with TestObjects with BeforeAndAfterE
   private var trips: TripRegistry = null
 
   override protected def beforeEach(): Unit = {
-
     reservedToken = tokenRegistry.reserveTokenForUser(user)
     trips = TripRegistry(tripCompletionRules)
   }

@@ -18,4 +18,9 @@ class BikeStation(val id: String, val numberOfBikeAnchorages: Int, val trips: Tr
   }
 
   def getParkedBikes: Seq[BikeAnchorage] = bikeAnchorages.filter(_.parkedBike.isDefined)
+
+  def parkBikeAtAnchorage(bike: Bike, anchorageId: Int): BikeStation = {
+    getAnchorageById(anchorageId).map(_.parkBike(bike))
+    this
+  }
 }

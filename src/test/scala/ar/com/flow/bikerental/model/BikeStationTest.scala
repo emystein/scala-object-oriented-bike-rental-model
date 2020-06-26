@@ -9,6 +9,7 @@ class BikeStationTest extends AnyFunSuite with TestObjects with BeforeAndAfterEa
   private var trips: TripRegistry = null
 
   override protected def beforeEach(): Unit = {
+    tokenRegistry.deleteAll()
     reservedToken = tokenRegistry.reserveTokenForUser(user)
     bikeShop = new BikeShop()
     trips = new TripRegistry(tripCompletionRules)
@@ -91,6 +92,14 @@ class BikeStationTest extends AnyFunSuite with TestObjects with BeforeAndAfterEa
     val bikeStation = new BikeStation("1", numberOfBikeAnchorages = 2, trips, bikeShop)
 
     bikeStation.getAnchorageById(3) shouldNot be(defined)
+  }
+
+  test("givenABikeWhenParkBikeAtAnchorageItShouldAcceptTheBike") {
+    val bikeStation = new BikeStation("1", numberOfBikeAnchorages = 2, trips, bikeShop)
+
+    bikeStation.parkBikeAtAnchorage(bike1, 1)
+
+    bikeStation.getAnchorageById(1).get.parkedBike shouldBe Some(bike1)
   }
 
   private def fillStationWithBikes(bikeStation: BikeStation) = bikeStation.bikeAnchorages.foreach(_.parkBike(new Bike))
