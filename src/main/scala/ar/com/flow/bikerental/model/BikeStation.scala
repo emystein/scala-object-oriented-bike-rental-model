@@ -1,8 +1,9 @@
 package ar.com.flow.bikerental.model
 
 import ar.com.flow.bikerental.model.token.ReservedRentToken
+import ar.com.flow.bikerental.model.trip.completion.TripResult
 
-class BikeStation(val id: String, val numberOfBikeAnchorages: Int, val trips: TripRegistry, val bikeShop: BikeShop) {
+case class BikeStation(id: Option[String], numberOfBikeAnchorages: Int, trips: TripRegistry, bikeShop: BikeShop) {
   val bikeAnchorages: IndexedSeq[BikeAnchorage]  = (1 to numberOfBikeAnchorages).map(i => new BikeAnchorage(trips, bikeShop))
 
   def getFreeSpots: Seq[BikeAnchorage] = bikeAnchorages.filter(anchorage => anchorage.parkedBike.isEmpty)
@@ -19,7 +20,7 @@ class BikeStation(val id: String, val numberOfBikeAnchorages: Int, val trips: Tr
 
   def getParkedBikes: Seq[BikeAnchorage] = bikeAnchorages.filter(_.parkedBike.isDefined)
 
-  def parkBikeAtAnchorage(bike: Bike, anchorageId: Int) = {
-    getAnchorageById(anchorageId).map(_.parkBike(bike))
+  def parkBikeAtAnchorage(bike: Bike, anchorageId: Int): Option[TripResult] = {
+    getAnchorageById(anchorageId).flatMap(_.parkBike(bike))
   }
 }
