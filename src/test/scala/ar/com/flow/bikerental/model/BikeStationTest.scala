@@ -94,13 +94,5 @@ class BikeStationTest extends AnyFunSuite with TestObjects with BeforeAndAfterEa
     bikeStation.getAnchorageById(3) shouldNot be(defined)
   }
 
-  test("givenABikeWhenParkBikeAtAnchorageItShouldAcceptTheBike") {
-    val bikeStation = BikeStation(Some("1"), numberOfBikeAnchorages = 2, trips, bikeShop)
-
-    bikeStation.parkBikeAtAnchorage(bike1, 1)
-
-    bikeStation.getAnchorageById(1).get.parkedBike shouldBe Some(bike1)
-  }
-
   private def fillStationWithBikes(bikeStation: BikeStation): Unit = bikeStation.bikeAnchorages.foreach(_.parkBike(new Bike))
 }
