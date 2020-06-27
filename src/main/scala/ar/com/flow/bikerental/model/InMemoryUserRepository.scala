@@ -5,15 +5,17 @@ import java.util.UUID
 import scala.collection.mutable
 
 class InMemoryUserRepository extends UserRepository {
-  val usersById: mutable.Map[String, User] = new mutable.HashMap[String, User]
+  val usersById: mutable.Map[Long, User] = new mutable.HashMap[Long, User]
 
   override def save(user: User): User = {
-    val saveUser = User(Some(user.id.getOrElse(UUID.randomUUID().toString)), user.name)
+    val saveUser = User(Some(user.id.getOrElse(nextId())), user.name)
 
     usersById.put(saveUser.id.get, saveUser)
 
     saveUser
   }
 
-  override def getById(userId: String): Option[User] = usersById.get(userId)
+  override def getById(userId: Long): Option[User] = usersById.get(userId)
+
+  private def nextId() = usersById.keys.max + 1
 }

@@ -5,7 +5,7 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
 class BanUserActionTest extends AnyFunSuite with Matchers {
-  private val user = new User(Some("1"), "Emiliano Menéndez")
+  private val user = new User(Some(1), "Emiliano Menéndez")
 
   test("givenAUserAndAnExecuteUserBanActionWhenExecuteThenTheUserBansShouldIncludeTheUser") {
     val userBanAction = new BanUser(user)

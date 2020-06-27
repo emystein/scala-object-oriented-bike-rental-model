@@ -27,6 +27,6 @@ case class BikeMaintenanceRequest(bike: Bike)
 
 case class BikeMaintenanceToken(bike: Bike) extends Token {
   override var expiration: LocalDateTime = LocalDateTime.now().plusWeeks(1)
-  override val owner: User = User(Some("-1"), "BikeShop")
+  override val owner: User = User(Some(0), "BikeShop")
 }
 
