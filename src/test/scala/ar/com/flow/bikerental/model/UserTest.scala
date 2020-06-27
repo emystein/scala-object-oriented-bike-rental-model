@@ -7,13 +7,13 @@ import org.scalatest.matchers.should.Matchers
 
 class UserTest extends AnyFunSuite with Matchers {
     test("givenAnInitialStateWhenCreateAUserThenItShouldNotBeBanned") {
-        val user = User("1", "Emiliano Menéndez")
+        val user = User(Some("1"), "Emiliano Menéndez")
 
         user.isBanned shouldBe false
     }
 
     test("givenANotBannedUserWhenBanUserForTwoDaysThenUserShouldBeBannedForTwoDays") {
-        val user = User("1", "Emiliano Menéndez")
+        val user = User(Some("1"), "Emiliano Menéndez")
 
         user.ban(Period.ofDays(2))
 

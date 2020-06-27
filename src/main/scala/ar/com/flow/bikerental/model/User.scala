@@ -6,7 +6,7 @@ import java.time.Period
 import ar.com.flow.bikerental.model
 import ar.com.flow.bikerental.model.ban.UserBan
 
-case class User(id: String, name: String) {
+case class User(id: Option[String], name: String) {
   var ban: Option[UserBan] = None
 
   def isBanned = ban.isDefined

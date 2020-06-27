@@ -9,7 +9,7 @@ import ar.com.flow.bikerental.model.trip.completion.{TripCompletionRules, TripCo
 import scala.util.Random
 
 trait TestObjects {
-  val user: User = User("1", "Emiliano Menéndez")
+  val user: User = User(Some("1"), "Emiliano Menéndez")
   val bike1: Bike = Bike("1")
   val bike2: Bike = Bike("2")
   val tripCompletionRules: TripCompletionRules = TripCompletionRulesFactory.create
