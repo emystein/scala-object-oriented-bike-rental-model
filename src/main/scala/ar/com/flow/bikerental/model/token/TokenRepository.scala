@@ -8,5 +8,5 @@ trait TokenRepository[T] {
   def getById(tokenId: String): Option[T]
   def getAllByUser(user: User): Iterable[T]
   def contains(token: T): Boolean
-  def deleteAll(): Unit
+  def clear(): Unit
 }

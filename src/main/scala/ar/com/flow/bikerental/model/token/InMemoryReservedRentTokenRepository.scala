@@ -23,5 +23,5 @@ class InMemoryReservedRentTokenRepository extends TokenRepository[ReservedRentTo
 
   override def contains(token: ReservedRentToken): Boolean = tokensByValue.valuesIterator.contains(token)
 
-  override def deleteAll(): Unit = tokensByUser.clear()
+  override def clear(): Unit = tokensByUser.clear()
 }

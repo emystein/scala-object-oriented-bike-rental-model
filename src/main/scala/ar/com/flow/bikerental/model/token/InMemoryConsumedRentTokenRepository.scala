@@ -17,5 +17,5 @@ class InMemoryConsumedRentTokenRepository extends TokenRepository[ConsumedRentTo
 
   override def contains(token: ConsumedRentToken): Boolean = consumedTokens.contains(token)
 
-  override def deleteAll(): Unit = consumedTokens.clear()
+  override def clear(): Unit = consumedTokens.clear()
 }

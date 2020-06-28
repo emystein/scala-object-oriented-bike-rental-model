@@ -34,7 +34,7 @@ case class TokenRegistry(random: Random = new Random,
   def tokensOf(user: User): Iterable[ReservedRentToken] = tokensByUser.getAllByUser(user)
 
   def deleteAll(): Unit = {
-    tokensByUser.deleteAll()
-    consumedTokens.deleteAll()
+    tokensByUser.clear()
+    consumedTokens.clear()
   }
 }
