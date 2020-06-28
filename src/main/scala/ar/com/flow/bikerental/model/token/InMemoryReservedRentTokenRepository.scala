@@ -1,9 +1,8 @@
 package ar.com.flow.bikerental.model.token
 
-import java.util
-
 import ar.com.flow.bikerental.model.User
 import com.google.common.collect.{ArrayListMultimap, Multimap}
+import scala.jdk.CollectionConverters._
 
 import scala.collection.mutable
 
@@ -20,7 +19,7 @@ class InMemoryReservedRentTokenRepository extends ReservedRentTokenRepository {
     tokensByUser.put(token.owner, token)
   }
 
-  override def getAllByUser(user: User): util.Collection[ReservedRentToken] = tokensByUser.get(user)
+  override def getAllByUser(user: User): Iterable[ReservedRentToken] = tokensByUser.get(user).asScala
 
   override def contains(token: ReservedRentToken): Boolean = tokensByValue.valuesIterator.contains(token)
 

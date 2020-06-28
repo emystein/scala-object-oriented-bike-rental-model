@@ -2,7 +2,6 @@ package ar.com.flow.bikerental.model.token
 
 import java.time.LocalDateTime.now
 import java.time.Period
-import java.util
 
 import ar.com.flow.bikerental.model.User
 
@@ -32,7 +31,7 @@ case class TokenRegistry(random: Random = new Random,
     consumedToken
   }
 
-  def tokensOf(user: User): util.Collection[ReservedRentToken] = tokensByUser.getAllByUser(user)
+  def tokensOf(user: User): Iterable[ReservedRentToken] = tokensByUser.getAllByUser(user)
 
   def deleteAll(): Unit = {
     tokensByUser.deleteAll()
