@@ -16,34 +16,34 @@ class BikeStationTest extends AnyFunSuite with TestObjects with BeforeAndAfterEa
   }
   
   test("givenABikeStationWhenAskForAnchoragesThenItShouldReturnAnchorages") {
-    val bikeStation = BikeStation(Some("1"), numberOfBikeAnchorages = 2, trips, bikeShop)
-   bikeStation.bikeAnchorages should have size 2
+    val bikeStation = BikeStation(Some("1"), anchorageCount = 2, trips, bikeShop)
+   bikeStation.anchorages should have size 2
   }
 
   test("givenNoParkedBikesWhenAskTheStationForParkedBikesThenItShouldRetrieveEmpty") {
-    val bikeStation = BikeStation(Some("1"), numberOfBikeAnchorages = 2, trips, bikeShop)
+    val bikeStation = BikeStation(Some("1"), anchorageCount = 2, trips, bikeShop)
     bikeStation.occupiedSpots should be(Nil)
   }
 
   test("givenParkedBikesWhenAskTheStationForParkedBikesThenItShouldRetrieveTheBikes") {
-    val bikeStation = BikeStation(Some("1"), numberOfBikeAnchorages = 2, trips, bikeShop)
+    val bikeStation = BikeStation(Some("1"), anchorageCount = 2, trips, bikeShop)
     fillStationWithBikes(bikeStation)
     bikeStation.occupiedSpots should have size 2
   }
 
   test("givenNoParkedBikesWhenAskTheStationForFreeSpotsThenItShouldRetrieveAllAnchorages") {
-    val bikeStation = BikeStation(Some("1"), numberOfBikeAnchorages = 2, trips, bikeShop)
+    val bikeStation = BikeStation(Some("1"), anchorageCount = 2, trips, bikeShop)
     bikeStation.freeSpots should have size 2
   }
 
   test("givenAFullStationWhenAskTheStationForFreeSpotsThenItShouldRetrieveTheAnchorages") {
-    val bikeStation = BikeStation(Some("1"), numberOfBikeAnchorages = 2, trips, bikeShop)
+    val bikeStation = BikeStation(Some("1"), anchorageCount = 2, trips, bikeShop)
     fillStationWithBikes(bikeStation)
     bikeStation.freeSpots should be(Nil)
   }
 
   test("givenAnAvailableBikeAndAValidTokenWhenPickUpABikeFromTheStationThenTheAvailableBikesShouldDecrement") {
-    val bikeStation = BikeStation(Some("1"), numberOfBikeAnchorages = 2, trips, bikeShop)
+    val bikeStation = BikeStation(Some("1"), anchorageCount = 2, trips, bikeShop)
     fillStationWithBikes(bikeStation)
     val rentToken = tokenRegistry.reserveTokenForUser(user)
     bikeStation.pickupAvailableBike(rentToken)
@@ -51,20 +51,20 @@ class BikeStationTest extends AnyFunSuite with TestObjects with BeforeAndAfterEa
   }
 
   test("givenAnAvailableBikeAndAValidTokenWhenPickUpABikeFromTheStationThenItShouldReleaseTheBike") {
-    val bikeStation = BikeStation(Some("1"), numberOfBikeAnchorages = 1, trips, bikeShop)
+    val bikeStation = BikeStation(Some("1"), anchorageCount = 1, trips, bikeShop)
     fillStationWithBikes(bikeStation)
     val bike = bikeStation.pickupAvailableBike(reservedToken)
     bike should be(defined)
   }
 
   test("givenNoAvailableBikesWhenPickupABikeFromTheStationThenItShouldNotReleaseAnyBike") {
-    val bikeStation = BikeStation(Some("1"), numberOfBikeAnchorages = 0, trips, bikeShop)
+    val bikeStation = BikeStation(Some("1"), anchorageCount = 0, trips, bikeShop)
     val bike = bikeStation.pickupAvailableBike(reservedToken)
     bike shouldNot be(defined)
   }
 
   test("givenAUsedTokenWhenPickingUpABikeUsingItThenThePickupShouldBeRejected") {
-    val bikeStation = BikeStation(Some("1"), numberOfBikeAnchorages = 1, trips, bikeShop)
+    val bikeStation = BikeStation(Some("1"), anchorageCount = 1, trips, bikeShop)
     fillStationWithBikes(bikeStation)
     // use valid rent token for the first time
     var bike = bikeStation.pickupAvailableBike(reservedToken)
@@ -75,22 +75,22 @@ class BikeStationTest extends AnyFunSuite with TestObjects with BeforeAndAfterEa
   }
 
   test("givenAValidAnchorageWhenGetAnchorageByIdItShouldBePresent") {
-    val bikeStation = BikeStation(Some("1"), numberOfBikeAnchorages = 2, trips, bikeShop)
+    val bikeStation = BikeStation(Some("1"), anchorageCount = 2, trips, bikeShop)
     bikeStation.getAnchorageById(1) should be(defined)
     bikeStation.getAnchorageById(2) should be(defined)
   }
 
   test("givenAnInvalidAnchorageIdWhenGetAnchorageByIdItShouldReturnFirst") {
-    val bikeStation = BikeStation(Some("1"), numberOfBikeAnchorages = 2, trips, bikeShop)
+    val bikeStation = BikeStation(Some("1"), anchorageCount = 2, trips, bikeShop)
     bikeStation.getAnchorageById(-1) shouldBe defined
     bikeStation.getAnchorageById(0) shouldBe defined
   }
 
   test("givenAnAnchorageIdGreaterThanPresentWhenGetAnchorageByIdItShouldReturnNone") {
-    val bikeStation = BikeStation(Some("1"), numberOfBikeAnchorages = 2, trips, bikeShop)
+    val bikeStation = BikeStation(Some("1"), anchorageCount = 2, trips, bikeShop)
 
     bikeStation.getAnchorageById(3) shouldNot be(defined)
   }
 
-  private def fillStationWithBikes(bikeStation: BikeStation): Unit = bikeStation.bikeAnchorages.foreach(_.parkBike(new Bike))
+  private def fillStationWithBikes(bikeStation: BikeStation): Unit = bikeStation.anchorages.foreach(_.parkBike(new Bike))
 }
