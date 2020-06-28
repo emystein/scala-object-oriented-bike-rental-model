@@ -8,6 +8,7 @@ class TripTest extends AnyFunSuite with TestObjects with BeforeAndAfterEach with
   private var pickUpEvent: BikePickUpEvent = null
 
   override protected def beforeEach(): Unit = {
+    tokenRegistry.deleteAll()
     reservedToken = tokenRegistry.reserveTokenForUser(user)
     pickUpEvent = BikePickUpEvent(bike1, reservedToken)
   }

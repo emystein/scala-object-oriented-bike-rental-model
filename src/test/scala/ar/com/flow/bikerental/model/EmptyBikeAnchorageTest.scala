@@ -14,11 +14,12 @@ class EmptyBikeAnchorageTest extends AnyWordSpec with TestObjects with BeforeAnd
   private var reservedRentToken1: ReservedRentToken = null
 
   override protected def beforeEach(): Unit = {
+    tokenRegistry.deleteAll()
     reservedRentToken1 = tokenRegistry.reserveTokenForUser(user)
     bikeShop = new BikeShop()
-    trips = new TripRegistry(tripCompletionRules)
+    trips = TripRegistry(tripCompletionRules)
     station = BikeStation(Some("1"), numberOfBikeAnchorages = 1, trips, bikeShop)
-    anchorage = station.getFreeSpots.iterator.next
+    anchorage = station.freeSpots.iterator.next
   }
 
   "An empty Bike Anchorage" when {

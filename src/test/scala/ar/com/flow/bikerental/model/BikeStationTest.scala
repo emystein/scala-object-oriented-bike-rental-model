@@ -22,24 +22,24 @@ class BikeStationTest extends AnyFunSuite with TestObjects with BeforeAndAfterEa
 
   test("givenNoParkedBikesWhenAskTheStationForParkedBikesThenItShouldRetrieveEmpty") {
     val bikeStation = BikeStation(Some("1"), numberOfBikeAnchorages = 2, trips, bikeShop)
-    bikeStation.getParkedBikes should be(Nil)
+    bikeStation.occupiedSpots should be(Nil)
   }
 
   test("givenParkedBikesWhenAskTheStationForParkedBikesThenItShouldRetrieveTheBikes") {
     val bikeStation = BikeStation(Some("1"), numberOfBikeAnchorages = 2, trips, bikeShop)
     fillStationWithBikes(bikeStation)
-    bikeStation.getParkedBikes should have size 2
+    bikeStation.occupiedSpots should have size 2
   }
 
   test("givenNoParkedBikesWhenAskTheStationForFreeSpotsThenItShouldRetrieveAllAnchorages") {
     val bikeStation = BikeStation(Some("1"), numberOfBikeAnchorages = 2, trips, bikeShop)
-    bikeStation.getFreeSpots should have size 2
+    bikeStation.freeSpots should have size 2
   }
 
   test("givenAFullStationWhenAskTheStationForFreeSpotsThenItShouldRetrieveTheAnchorages") {
     val bikeStation = BikeStation(Some("1"), numberOfBikeAnchorages = 2, trips, bikeShop)
     fillStationWithBikes(bikeStation)
-    bikeStation.getFreeSpots should be(Nil)
+    bikeStation.freeSpots should be(Nil)
   }
 
   test("givenAnAvailableBikeAndAValidTokenWhenPickUpABikeFromTheStationThenTheAvailableBikesShouldDecrement") {
@@ -47,7 +47,7 @@ class BikeStationTest extends AnyFunSuite with TestObjects with BeforeAndAfterEa
     fillStationWithBikes(bikeStation)
     val rentToken = tokenRegistry.reserveTokenForUser(user)
     bikeStation.pickupAvailableBike(rentToken)
-    bikeStation.getParkedBikes should have size 1
+    bikeStation.occupiedSpots should have size 1
   }
 
   test("givenAnAvailableBikeAndAValidTokenWhenPickUpABikeFromTheStationThenItShouldReleaseTheBike") {
