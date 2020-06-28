@@ -12,4 +12,6 @@ class InMemoryBikeRepository extends BikeRepository {
   override def getAll(): Iterable[Bike] = bikesBySerialNumber.values
 
   override def delete(bike: Bike): Unit = bikesBySerialNumber.remove(bike.serialNumber)
+
+  override def clear(): Unit = bikesBySerialNumber.clear()
 }

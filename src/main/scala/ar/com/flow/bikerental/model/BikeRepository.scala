@@ -5,4 +5,5 @@ trait BikeRepository {
   def getBySerialNumber(serialNumber: String): Option[Bike]
   def getAll(): Iterable[Bike]
   def delete(bike: Bike)
+  def clear(): Unit
 }

@@ -1,27 +1,23 @@
 package ar.com.flow.bikerental.model.token
 
 import ar.com.flow.bikerental.model.User
-import com.google.common.collect.{ArrayListMultimap, Multimap}
 
 import scala.collection.mutable
-import scala.jdk.CollectionConverters._
 
 class InMemoryReservedRentTokenRepository extends TokenRepository[ReservedRentToken] {
-  val tokensByValue: mutable.Map[String, ReservedRentToken] = new mutable.HashMap()
-  val tokensByUser: Multimap[User, ReservedRentToken] = ArrayListMultimap.create[User, ReservedRentToken]
+  val tokensById: mutable.Map[String, ReservedRentToken] = new mutable.HashMap()
 
-  override def getAll(): Iterable[ReservedRentToken] = tokensByValue.values
+  override def getAll(): Iterable[ReservedRentToken] = tokensById.values
 
-  override def getById(id: String): Option[ReservedRentToken] = tokensByValue.get(id)
+  override def getById(id: String): Option[ReservedRentToken] = tokensById.get(id)
 
   override def save(token: ReservedRentToken): Unit = {
-    tokensByValue.put(token.value, token)
-    tokensByUser.put(token.owner, token)
+    tokensById.put(token.value, token)
   }
 
-  override def getAllByUser(user: User): Iterable[ReservedRentToken] = tokensByUser.get(user).asScala
+  override def getAllByUser(user: User): Iterable[ReservedRentToken] = tokensById.values.filter(_.owner == user)
 
-  override def contains(token: ReservedRentToken): Boolean = tokensByValue.valuesIterator.contains(token)
+  override def contains(token: ReservedRentToken): Boolean = tokensById.valuesIterator.contains(token)
 
-  override def clear(): Unit = tokensByUser.clear()
+  override def clear(): Unit = tokensById.clear()
 }
