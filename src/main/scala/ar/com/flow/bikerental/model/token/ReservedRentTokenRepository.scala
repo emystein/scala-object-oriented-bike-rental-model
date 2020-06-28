@@ -5,8 +5,10 @@ import java.util
 import ar.com.flow.bikerental.model.User
 
 trait ReservedRentTokenRepository {
-  def getByValue(tokenId: String): Option[ReservedRentToken]
   def save(token: ReservedRentToken)
+  def getAll(): Iterable[ReservedRentToken]
+  def getById(tokenId: String): Option[ReservedRentToken]
   def getAllByUser(user: User): util.Collection[ReservedRentToken]
+  def contains(token: ReservedRentToken): Boolean
   def deleteAll(): Unit
 }

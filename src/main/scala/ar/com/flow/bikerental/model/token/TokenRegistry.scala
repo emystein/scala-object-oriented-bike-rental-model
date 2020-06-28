@@ -21,7 +21,7 @@ case class TokenRegistry(random: Random = new Random,
   }
 
   def getTokenByValue(value: String): Option[ReservedRentToken] = {
-    tokensByUser.getByValue(value)
+    tokensByUser.getById(value)
   }
 
   def consumeToken(token: ReservedRentToken): ConsumedRentToken = {

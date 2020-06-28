@@ -11,7 +11,9 @@ class InMemoryReservedRentTokenRepository extends ReservedRentTokenRepository {
   val tokensByValue: mutable.Map[String, ReservedRentToken] = new mutable.HashMap()
   val tokensByUser: Multimap[User, ReservedRentToken] = ArrayListMultimap.create[User, ReservedRentToken]
 
-  override def getByValue(tokenValue: String): Option[ReservedRentToken] = tokensByValue.get(tokenValue)
+  override def getAll(): Iterable[ReservedRentToken] = tokensByValue.values
+
+  override def getById(id: String): Option[ReservedRentToken] = tokensByValue.get(id)
 
   override def save(token: ReservedRentToken): Unit = {
     tokensByValue.put(token.value, token)
@@ -19,6 +21,8 @@ class InMemoryReservedRentTokenRepository extends ReservedRentTokenRepository {
   }
 
   override def getAllByUser(user: User): util.Collection[ReservedRentToken] = tokensByUser.get(user)
+
+  override def contains(token: ReservedRentToken): Boolean = tokensByValue.valuesIterator.contains(token)
 
   override def deleteAll(): Unit = tokensByUser.clear()
 }
