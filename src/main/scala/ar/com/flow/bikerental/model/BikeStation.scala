@@ -12,8 +12,6 @@ case class BikeStation(id: Option[String], numberOfBikeAnchorages: Int, trips: T
   def getAnyBikeAnchorageWithParkedBike: Option[BikeAnchorage] = bikeAnchorages.find(anchorage => anchorage.parkedBike.isDefined)
 
   def getAnchorageById(anchorageId: Int): Option[BikeAnchorage] = {
-    require(anchorageId > 0)
-
     bikeAnchorages.drop(anchorageId - 1).headOption
   }
 

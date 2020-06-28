@@ -80,12 +80,10 @@ class BikeStationTest extends AnyFunSuite with TestObjects with BeforeAndAfterEa
     bikeStation.getAnchorageById(2) should be(defined)
   }
 
-  test("givenAnInvalidAnchorageIdWhenGetAnchorageByIdItShouldThrowAnException") {
+  test("givenAnInvalidAnchorageIdWhenGetAnchorageByIdItShouldReturnFirst") {
     val bikeStation = BikeStation(Some("1"), numberOfBikeAnchorages = 2, trips, bikeShop)
-
-    assertThrows[IllegalArgumentException](
-      bikeStation.getAnchorageById(0)
-    )
+    bikeStation.getAnchorageById(-1) shouldBe defined
+    bikeStation.getAnchorageById(0) shouldBe defined
   }
 
   test("givenAnAnchorageIdGreaterThanPresentWhenGetAnchorageByIdItShouldReturnNone") {
