@@ -2,11 +2,11 @@ package ar.com.flow.bikerental.model.token
 
 import ar.com.flow.bikerental.model.User
 import com.google.common.collect.{ArrayListMultimap, Multimap}
-import scala.jdk.CollectionConverters._
 
 import scala.collection.mutable
+import scala.jdk.CollectionConverters._
 
-class InMemoryReservedRentTokenRepository extends ReservedRentTokenRepository {
+class InMemoryReservedRentTokenRepository extends TokenRepository[ReservedRentToken] {
   val tokensByValue: mutable.Map[String, ReservedRentToken] = new mutable.HashMap()
   val tokensByUser: Multimap[User, ReservedRentToken] = ArrayListMultimap.create[User, ReservedRentToken]
 

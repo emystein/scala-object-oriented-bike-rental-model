@@ -8,10 +8,10 @@ import ar.com.flow.bikerental.model.User
 import scala.util.Random
 
 case class TokenRegistry(random: Random = new Random,
-                         tokensByUser: ReservedRentTokenRepository,
-                         consumedTokens: ConsumedRentTokenRepository) {
+                         tokensByUser: TokenRepository[ReservedRentToken],
+                         consumedTokens: TokenRepository[ConsumedRentToken]) {
 
-  def generateTokenValidForPeriod(period: Period, owner: User) = ReservedRentToken(value = random.nextLong(10).toString, expiration = now.plus(period), owner, this)
+  def generateTokenValidForPeriod(period: Period, owner: User) = ReservedRentToken(value = random.nextLong().toString, expiration = now.plus(period), owner, this)
 
   def reserveTokenForUser(user: User): ReservedRentToken = {
     val reservedToken = generateTokenValidForPeriod(Period.ofDays(1), user)

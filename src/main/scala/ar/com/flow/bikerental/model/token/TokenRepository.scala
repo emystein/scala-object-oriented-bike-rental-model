@@ -10,7 +10,3 @@ trait TokenRepository[T] {
   def contains(token: T): Boolean
   def deleteAll(): Unit
 }
-
-trait ReservedRentTokenRepository extends TokenRepository[ReservedRentToken]
-
-trait ConsumedRentTokenRepository extends TokenRepository[ConsumedRentToken]

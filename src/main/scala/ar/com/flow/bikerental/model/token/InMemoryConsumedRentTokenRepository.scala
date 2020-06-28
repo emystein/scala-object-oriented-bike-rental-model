@@ -4,7 +4,7 @@ import ar.com.flow.bikerental.model.User
 
 import scala.collection.mutable
 
-class InMemoryConsumedRentTokenRepository extends ConsumedRentTokenRepository {
+class InMemoryConsumedRentTokenRepository extends TokenRepository[ConsumedRentToken] {
   private val consumedTokens = new mutable.HashSet[ConsumedRentToken]
 
   override def save(token: ConsumedRentToken): Unit = consumedTokens.add(token)
