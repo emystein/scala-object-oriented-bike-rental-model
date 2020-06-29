@@ -11,8 +11,7 @@ trait BikeEvent {
   def timestamp: LocalDateTime
 }
 
-case class BikePickUpEvent(bike: Bike, reservedToken: ReservedRentToken) extends BikeEvent {
-  val consumedToken: ConsumedRentToken = reservedToken.consume
+case class BikePickUpEvent(bike: Bike, consumedToken: ConsumedRentToken) extends BikeEvent {
   val user = consumedToken.owner
   // TODO convert to val
   var timestamp = now

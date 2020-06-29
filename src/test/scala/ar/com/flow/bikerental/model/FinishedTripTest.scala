@@ -12,8 +12,9 @@ class FinishedTripTest extends AnyWordSpec with TestObjects with BeforeAndAfterE
   private var bikeDropOff: LocalDateTime = now
 
   override protected def beforeEach(): Unit = {
-    tokenRegistry.deleteAll()
-    bikePickup = BikePickUpEvent(bike1, reservedToken)
+    tokenRegistry.clear()
+    tripRegistry.clear()
+    bikePickup = tripRegistry.startTrip(bike1, reservedToken).pickUp
   }
 
   "A finished trip" when {

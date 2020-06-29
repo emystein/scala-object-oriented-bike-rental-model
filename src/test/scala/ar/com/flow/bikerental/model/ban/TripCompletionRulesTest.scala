@@ -12,11 +12,12 @@ class TripCompletionRulesTest extends AnyFunSuite with TestObjects with BeforeAn
   private val sundayAt10Am = LocalDateTime.of(2019, 12, 1, 10, 0)
 
   override protected def beforeEach(): Unit = {
-    tokenRegistry.deleteAll
+    tokenRegistry.clear()
+    tripRegistry.clear()
   }
 
   test("givenARentedBikeOnWeekdayWhenReturnTheBikeBefore1HourThenTheBanRulesShouldNotApply") {
-    val bikePickup = BikePickUpEvent(bike1, reservedToken)
+    val bikePickup = tripRegistry.startTrip(bike1, reservedToken).pickUp
     bikePickup.timestamp = mondayAt10Am.minusMinutes(59)
 
     val result = tripCompletionRules.test(new FinishedTrip(bikePickup, dropOffTimestamp = mondayAt10Am))
@@ -25,7 +26,7 @@ class TripCompletionRulesTest extends AnyFunSuite with TestObjects with BeforeAn
   }
 
   test("givenARentedBikeOnWeekdayWhenReturnTheBikeAfter1HourThenTheUserShouldGetBanned") {
-    val bikePickup = BikePickUpEvent(bike1, reservedToken)
+    val bikePickup = tripRegistry.startTrip(bike1, reservedToken).pickUp
     bikePickup.timestamp = mondayAt10Am.minusHours(2)
 
     val result = tripCompletionRules.test(new FinishedTrip(bikePickup, dropOffTimestamp = mondayAt10Am))
@@ -34,7 +35,7 @@ class TripCompletionRulesTest extends AnyFunSuite with TestObjects with BeforeAn
   }
 
   test("givenARentedBikeOnWeekendWhenReturnTheBikeBefore2HoursThenTheBanRulesShouldNotApply") {
-    val bikePickup = BikePickUpEvent(bike1, reservedToken)
+    val bikePickup = tripRegistry.startTrip(bike1, reservedToken).pickUp
     bikePickup.timestamp = sundayAt10Am.minusMinutes(119)
 
     val result = tripCompletionRules.test(new FinishedTrip(bikePickup, dropOffTimestamp = sundayAt10Am))
@@ -43,7 +44,7 @@ class TripCompletionRulesTest extends AnyFunSuite with TestObjects with BeforeAn
   }
 
   test("givenARentedBikeOnWeekendWhenReturnTheBikeAfter2HoursThenTheUserShouldGetBanned") {
-    val bikePickup = BikePickUpEvent(bike1, reservedToken)
+    val bikePickup = tripRegistry.startTrip(bike1, reservedToken).pickUp
     bikePickup.timestamp = sundayAt10Am.minusHours(3)
 
     val result = tripCompletionRules.test(new FinishedTrip(bikePickup, dropOffTimestamp = sundayAt10Am))

@@ -8,17 +8,16 @@ import org.scalatest.wordspec.AnyWordSpec
 
 class EmptyBikeAnchorageTest extends AnyWordSpec with TestObjects with BeforeAndAfterEach with Matchers {
   private var bikeShop: BikeShop = null
-  private var trips: TripRegistry = null
   private var station: BikeStation = null
   private var anchorage: BikeAnchorage = null
   private var reservedRentToken1: ReservedRentToken = null
 
   override protected def beforeEach(): Unit = {
-    tokenRegistry.deleteAll()
+    tokenRegistry.clear()
+    tripRegistry.clear()
     reservedRentToken1 = tokenRegistry.reserveTokenForUser(user)
     bikeShop = new BikeShop()
-    trips = TripRegistry(tripCompletionRules)
-    station = BikeStation(Some("1"), anchorageCount = 1, trips, bikeShop)
+    station = BikeStation(Some("1"), anchorageCount = 1, tripRegistry, bikeShop)
     anchorage = station.freeSpots.iterator.next
   }
 
@@ -44,10 +43,10 @@ class EmptyBikeAnchorageTest extends AnyWordSpec with TestObjects with BeforeAnd
         // Releasing a bike starts a trip
         anchorage.releaseBike(reservedRentToken1)
         val completedBikeTrip = anchorage.parkBike(bike1)
-        val trip = trips.getCurrentTripForBike(bike1)
+        val trip = tripRegistry.getCurrentTripForBike(bike1)
 
         val completedTrip = completedBikeTrip.get.completedTrip
-        completedTrip.user shouldBe (trip.get.pickUp.reservedToken.owner)
+        completedTrip.user shouldBe (trip.get.pickUp.consumedToken.owner)
         completedTrip.bike shouldBe (trip.get.pickUp.bike)
       }
       "execute post actions" in {

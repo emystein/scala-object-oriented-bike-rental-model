@@ -11,7 +11,7 @@ case class TokenRegistry(random: Random = new Random,
                          reservedTokens: TokenRepository[ReservedRentToken],
                          consumedTokens: TokenRepository[ConsumedRentToken]) {
 
-  def generateTokenValidForPeriod(period: Period, owner: User) = ReservedRentToken(value = random.nextLong().toString, expiration = now.plus(period), owner, this)
+  def generateTokenValidForPeriod(period: Period, owner: User) = ReservedRentToken(value = random.nextLong().toString, expiration = now.plus(period), owner)
 
   def reserveTokenForUser(user: User): ReservedRentToken = {
     val token = generateTokenValidForPeriod(Period.ofDays(1), user)
@@ -29,7 +29,7 @@ case class TokenRegistry(random: Random = new Random,
 
   def tokensOf(user: User): Iterable[ReservedRentToken] = reservedTokens.getAllByUser(user)
 
-  def deleteAll(): Unit = {
+  def clear(): Unit = {
     reservedTokens.clear()
     consumedTokens.clear()
   }

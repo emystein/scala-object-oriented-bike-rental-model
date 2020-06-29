@@ -11,7 +11,7 @@ import org.scalatest.matchers.should.Matchers
 
 class TokenRegistryTest extends AnyFunSuite with TestObjects with BeforeAndAfterEach with Matchers {
   override protected def beforeEach(): Unit = {
-    tokenRegistry.deleteAll()
+    tokenRegistry.clear()
   }
 
   test("givenATokenGeneratorWhenGeneratingANewTokenThenTheGeneratedTokenShouldBeValid") {

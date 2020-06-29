@@ -6,32 +6,29 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
 class TripRegistryTest extends AnyFunSuite with TestObjects with BeforeAndAfterEach with Matchers {
-  private var trips: TripRegistry = null
-
   override protected def beforeEach(): Unit = {
     reservedToken = tokenRegistry.reserveTokenForUser(user)
-    trips = TripRegistry(tripCompletionRules)
+    tripRegistry.clear()
   }
 
   test("givenATripWhenFinishTripThenTheEventShouldBePresent") {
-    val pickUpEvent = BikePickUpEvent(bike1, reservedToken)
-    val trip = Trip(pickUpEvent)
+    val trip = tripRegistry.startTrip(bike1, reservedToken)
 
-    val tripCompletionResult = trips.finish(trip)
+    val tripCompletionResult = tripRegistry.finish(trip)
 
     tripCompletionResult.rulesCheckResult.isInstanceOf[SuccessResult] shouldBe true
   }
 
   test("givenABikeWhenFinishCurrentTripForBikeThenTheEventShouldBePresent") {
-    val trip = trips.startTrip(bike1, reservedToken)
+    val trip = tripRegistry.startTrip(bike1, reservedToken)
 
-    val tripCompletionResult = trips.finishCurrentTripForBike(bike1)
+    val tripCompletionResult = tripRegistry.finishCurrentTripForBike(bike1)
 
     tripCompletionResult.get.rulesCheckResult.isInstanceOf[SuccessResult] shouldBe true
   }
 
   test("givenANoCurrentTripForBikeWhenFinishCurrentTripForBikeThenItShouldReturnNone") {
-    val tripCompletionResult = trips.finishCurrentTripForBike(bike1)
+    val tripCompletionResult = tripRegistry.finishCurrentTripForBike(bike1)
 
     tripCompletionResult shouldBe None
   }

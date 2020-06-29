@@ -9,17 +9,16 @@ import org.scalatest.matchers.should.Matchers
 
 class BikeAnchorageTest extends AnyFunSuite with TestObjects with BeforeAndAfterEach with Matchers {
   private var bikeShop: BikeShop = null
-  private var trips: TripRegistry = null
   private var station: BikeStation = null
   private var anchorage: BikeAnchorage = null
   private var reservedRentToken1: ReservedRentToken = null
 
   override protected def beforeEach(): Unit = {
-    tokenRegistry.deleteAll()
+    tokenRegistry.clear()
+    tripRegistry.clear()
     reservedRentToken1 = tokenRegistry.reserveTokenForUser(user)
     bikeShop = new BikeShop()
-    trips = TripRegistry(tripCompletionRules)
-    station = BikeStation(Some("1"), anchorageCount = 1, trips, bikeShop)
+    station = BikeStation(Some("1"), anchorageCount = 1, tripRegistry, bikeShop)
     anchorage = station.freeSpots.iterator.next
   }
 
@@ -72,7 +71,7 @@ class BikeAnchorageTest extends AnyFunSuite with TestObjects with BeforeAndAfter
   test("givenAParkedBikeWhenRetrieveTheBikeUsingAReservedTokenThenTheRetrieveBikeShouldBeAssociatedToTheToken") {
     anchorage.parkBike(bike1)
     val retrievedBike = anchorage.releaseBike(reservedRentToken1)
-    val trip = trips.getCurrentTripForBike(retrievedBike.get)
+    val trip = tripRegistry.getCurrentTripForBike(retrievedBike.get)
     val bikePickUpEvent = trip.get.pickUp
 
     bikePickUpEvent.user shouldBe reservedRentToken1.owner

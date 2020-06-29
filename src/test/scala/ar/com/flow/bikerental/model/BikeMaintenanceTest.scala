@@ -9,16 +9,15 @@ import scala.util.Random
 
 class BikeMaintenanceTest extends AnyWordSpec with TestObjects with BeforeAndAfterEach with Matchers {
   private var bikeShop: BikeShop = null
-  private var trips: TripRegistry = null
   private var station: BikeStation = null
   private var anchorage: BikeAnchorage = null
   private var reservedRentToken1: ReservedRentToken = null
 
   override protected def beforeEach(): Unit = {
+    tripRegistry.clear()
     reservedRentToken1 = tokenRegistry.reserveTokenForUser(user)
     bikeShop = new BikeShop()
-    trips = TripRegistry(tripCompletionRules)
-    station = BikeStation(Some("1"), anchorageCount = 1, trips, bikeShop)
+    station = BikeStation(Some("1"), anchorageCount = 1, tripRegistry, bikeShop)
     anchorage = station.freeSpots.iterator.next
   }
 
