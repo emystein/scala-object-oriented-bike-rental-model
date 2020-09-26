@@ -20,7 +20,7 @@ class TripCompletionRulesTest extends AnyFunSuite with TestObjects with BeforeAn
     val bikePickup = tripRegistry.startTrip(bike1, reservedToken).pickUp
     bikePickup.timestamp = mondayAt10Am.minusMinutes(59)
 
-    val result = tripCompletionRules.test(new FinishedTrip(bikePickup, dropOffTimestamp = mondayAt10Am))
+    val result = tripCompletionRules.test(new FinishedTrip(user, bike1, bikePickup.timestamp, dropOffTimestamp = mondayAt10Am))
 
     result.userIsBanned shouldBe false
   }
@@ -29,7 +29,7 @@ class TripCompletionRulesTest extends AnyFunSuite with TestObjects with BeforeAn
     val bikePickup = tripRegistry.startTrip(bike1, reservedToken).pickUp
     bikePickup.timestamp = mondayAt10Am.minusHours(2)
 
-    val result = tripCompletionRules.test(new FinishedTrip(bikePickup, dropOffTimestamp = mondayAt10Am))
+    val result = tripCompletionRules.test(new FinishedTrip(user, bike1, bikePickup.timestamp, dropOffTimestamp = mondayAt10Am))
 
     result.userIsBanned shouldBe true
   }
@@ -38,7 +38,7 @@ class TripCompletionRulesTest extends AnyFunSuite with TestObjects with BeforeAn
     val bikePickup = tripRegistry.startTrip(bike1, reservedToken).pickUp
     bikePickup.timestamp = sundayAt10Am.minusMinutes(119)
 
-    val result = tripCompletionRules.test(new FinishedTrip(bikePickup, dropOffTimestamp = sundayAt10Am))
+    val result = tripCompletionRules.test(new FinishedTrip(user, bike1, bikePickup.timestamp, dropOffTimestamp = sundayAt10Am))
 
     result.userIsBanned shouldBe false
   }
@@ -47,7 +47,7 @@ class TripCompletionRulesTest extends AnyFunSuite with TestObjects with BeforeAn
     val bikePickup = tripRegistry.startTrip(bike1, reservedToken).pickUp
     bikePickup.timestamp = sundayAt10Am.minusHours(3)
 
-    val result = tripCompletionRules.test(new FinishedTrip(bikePickup, dropOffTimestamp = sundayAt10Am))
+    val result = tripCompletionRules.test(new FinishedTrip(user, bike1, bikePickup.timestamp, dropOffTimestamp = sundayAt10Am))
 
     result.userIsBanned shouldBe true
   }

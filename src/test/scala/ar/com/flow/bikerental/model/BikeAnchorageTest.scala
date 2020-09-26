@@ -68,17 +68,6 @@ class BikeAnchorageTest extends AnyFunSuite with TestObjects with BeforeAndAfter
     }
   }
 
-  test("givenAParkedBikeWhenRetrieveTheBikeUsingAReservedTokenThenTheRetrieveBikeShouldBeAssociatedToTheToken") {
-    anchorage.parkBike(bike1)
-    val retrievedBike = anchorage.releaseBike(reservedRentToken1)
-    val trip = tripRegistry.getCurrentTripForBike(retrievedBike.get)
-    val bikePickUpEvent = trip.get.pickUp
-
-    bikePickUpEvent.user shouldBe reservedRentToken1.owner
-    bikePickUpEvent.consumedToken shouldNot be(null)
-    bikePickUpEvent.bike shouldBe retrievedBike.get
-  }
-
   test("givenABannedUserAndAParkedBikeWhenRetrieveTheBikeUsingAReservedTokenThenTheBikeAnchorageShouldRejectToReleaseTheBike") {
     anchorage.parkBike(bike1)
     reservedRentToken1.owner.ban(Period.ofDays(2))

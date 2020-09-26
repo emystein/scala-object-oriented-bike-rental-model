@@ -15,14 +15,14 @@ case class TripRegistry(tokenRegistry: TokenRegistry, tripCompletionRules: TripC
     trip
   }
 
-  def getCurrentTripForBike(bike: Bike): Option[Trip] = tripsByBike.get(bike)
+  def getCurrentTripForBike(bike: Bike): Option[Trip] = bike.currentTrip
 
   def finishTrip(trip: Trip): TripResult = {
     trip.finish(tripCompletionRules)
   }
 
   def finishCurrentTripForBike(bike: Bike): Option[TripResult] = {
-    getCurrentTripForBike(bike).map(finishTrip)
+    bike.currentTrip.map(finishTrip)
   }
 
   def clear(): Unit = tripsByBike.clear()

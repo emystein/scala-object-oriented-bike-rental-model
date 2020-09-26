@@ -20,7 +20,7 @@ class FinishedTripTest extends AnyWordSpec with TestObjects with BeforeAndAfterE
   "A finished trip" when {
     "get the duration" should {
       "return duration between pick-up and drop-off" in {
-        val finishedTrip = new FinishedTrip(bikePickup, bikeDropOff)
+        val finishedTrip = new FinishedTrip(user, bike1, bikePickup.timestamp, bikeDropOff)
         finishedTrip.duration shouldBe (Duration.between(bikePickup.timestamp, bikeDropOff))
       }
     }
@@ -29,7 +29,7 @@ class FinishedTripTest extends AnyWordSpec with TestObjects with BeforeAndAfterE
     "ask if lasted more than 2 hours" should {
       "return false" in {
         bikeDropOff = bikePickup.timestamp.plusHours(1)
-        val finishedTrip = new FinishedTrip(bikePickup, bikeDropOff)
+        val finishedTrip = new FinishedTrip(user, bike1, bikePickup.timestamp, bikeDropOff)
         finishedTrip.hasLastedMoreThan(Duration.ofHours(2)) shouldBe false
       }
     }
@@ -38,7 +38,7 @@ class FinishedTripTest extends AnyWordSpec with TestObjects with BeforeAndAfterE
     "ask if lasted more than 2 hours" should {
       "return true" in {
         bikeDropOff = bikePickup.timestamp.plusHours(3)
-        val finishedTrip = new FinishedTrip(bikePickup, bikeDropOff)
+        val finishedTrip = new FinishedTrip(user, bike1, bikePickup.timestamp, bikeDropOff)
         finishedTrip.hasLastedMoreThan(Duration.ofHours(2)) shouldBe true
       }
     }

@@ -46,8 +46,8 @@ class EmptyBikeAnchorageTest extends AnyWordSpec with TestObjects with BeforeAnd
         val trip = tripRegistry.getCurrentTripForBike(bike1)
 
         val completedTrip = completedBikeTrip.get.completedTrip
-        completedTrip.user shouldBe (trip.get.pickUp.consumedToken.owner)
-        completedTrip.bike shouldBe (trip.get.pickUp.bike)
+        completedTrip.user shouldBe (reservedRentToken1.owner)
+        completedTrip.bike shouldBe (bike1)
       }
       "execute post actions" in {
         anchorage.parkBike(bike1)

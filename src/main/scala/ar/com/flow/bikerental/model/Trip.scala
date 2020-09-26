@@ -12,7 +12,7 @@ trait BikeEvent {
   def timestamp: LocalDateTime
 }
 
-case class BikePickUpEvent(bike: Bike, consumedToken: ConsumedRentToken) extends BikeEvent {
+case class BikePickUpEvent(var bike: Bike, consumedToken: ConsumedRentToken) extends BikeEvent {
   val user = consumedToken.owner
   // TODO convert to val
   var timestamp = now
@@ -20,26 +20,22 @@ case class BikePickUpEvent(bike: Bike, consumedToken: ConsumedRentToken) extends
 
 case class BikeDropOffEvent(user: User, bike: Bike, timestamp: LocalDateTime) extends BikeEvent
 
-object Trip {
-  def apply(bike: Bike, consumedRentToken: ConsumedRentToken): Trip = {
-    Trip(bike, BikePickUpEvent(bike, consumedRentToken))
-  }
-}
+case class Trip(var bike: Bike, consumedRentToken: ConsumedRentToken) {
+  bike.addTrip(this)
+  val pickUp: BikePickUpEvent = BikePickUpEvent(bike, consumedRentToken)
 
-case class Trip(bike: Bike, pickUp: BikePickUpEvent) {
   def finish(tripCompletionRules: TripCompletionRules): TripResult = {
-    val completedTrip = new FinishedTrip(this.pickUp, now)
+    val completedTrip = new FinishedTrip(consumedRentToken.owner, this.bike, this.pickUp.timestamp, now)
     val rulesCheckResult = tripCompletionRules.test(completedTrip)
     TripResult(completedTrip, rulesCheckResult)
   }
 }
 
-class FinishedTrip(var bikePickup: BikePickUpEvent, val dropOffTimestamp: LocalDateTime) {
-  val user = bikePickup.user
-  val bike = bikePickup.bike
-  val bikeDropOff = BikeDropOffEvent(bikePickup.user, bikePickup.bike, dropOffTimestamp)
+class FinishedTrip(val user: User, val bike: Bike, val bikePickup: LocalDateTime, val dropOffTimestamp: LocalDateTime) {
+  bike.finishTrip()
+  val bikeDropOff = BikeDropOffEvent(user, bike, dropOffTimestamp)
 
-  def duration: Duration = Duration.between(bikePickup.timestamp, bikeDropOff.timestamp)
+  def duration: Duration = Duration.between(bikePickup, bikeDropOff.timestamp)
 
   def endDayOfWeek: DayOfWeek = bikeDropOff.timestamp.getDayOfWeek
 
