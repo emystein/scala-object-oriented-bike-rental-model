@@ -14,9 +14,7 @@ class TripRegistryTest extends AnyFunSuite with TestObjects with BeforeAndAfterE
   test("givenATripWhenFinishTripThenTheEventShouldBePresent") {
     val trip = tripRegistry.startTrip(bike1, reservedToken)
 
-    val tripCompletionResult = tripRegistry.finish(trip)
-
-    tripCompletionResult.rulesCheckResult.isInstanceOf[SuccessResult] shouldBe true
+    tripRegistry.finish(trip).isSuccess shouldBe true
   }
 
   test("givenABikeWhenFinishCurrentTripForBikeThenTheEventShouldBePresent") {
@@ -24,12 +22,10 @@ class TripRegistryTest extends AnyFunSuite with TestObjects with BeforeAndAfterE
 
     val tripCompletionResult = tripRegistry.finishCurrentTripForBike(bike1)
 
-    tripCompletionResult.get.rulesCheckResult.isInstanceOf[SuccessResult] shouldBe true
+    tripCompletionResult.get.isSuccess shouldBe true
   }
 
   test("givenANoCurrentTripForBikeWhenFinishCurrentTripForBikeThenItShouldReturnNone") {
-    val tripCompletionResult = tripRegistry.finishCurrentTripForBike(bike1)
-
-    tripCompletionResult shouldBe None
+    tripRegistry.finishCurrentTripForBike(bike1) shouldBe None
   }
 }
