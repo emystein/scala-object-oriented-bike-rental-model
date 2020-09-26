@@ -1,7 +1,5 @@
 package ar.com.flow.bikerental.model
 
-import java.time.LocalDateTime.now
-
 import ar.com.flow.bikerental.model.token.{ReservedRentToken, TokenRegistry}
 import ar.com.flow.bikerental.model.trip.completion.{TripCompletionRules, TripResult}
 
@@ -12,22 +10,19 @@ case class TripRegistry(tokenRegistry: TokenRegistry, tripCompletionRules: TripC
 
   def startTrip(bike: Bike, reservedToken: ReservedRentToken): Trip = {
     val consumedToken = tokenRegistry.consumeToken(reservedToken)
-    val pickUp = BikePickUpEvent(bike, consumedToken)
-    val trip = Trip(pickUp)
+    val trip = Trip(bike, consumedToken)
     tripsByBike.put(bike, trip)
     trip
   }
 
   def getCurrentTripForBike(bike: Bike): Option[Trip] = tripsByBike.get(bike)
 
-  def finish(trip: Trip): TripResult = {
-    val completedTrip = new FinishedTrip(trip.pickUp, now)
-    val rulesCheckResult = tripCompletionRules.test(completedTrip)
-    TripResult(completedTrip, rulesCheckResult)
+  def finishTrip(trip: Trip): TripResult = {
+    trip.finish(tripCompletionRules)
   }
 
   def finishCurrentTripForBike(bike: Bike): Option[TripResult] = {
-    getCurrentTripForBike(bike).map(finish)
+    getCurrentTripForBike(bike).map(finishTrip)
   }
 
   def clear(): Unit = tripsByBike.clear()

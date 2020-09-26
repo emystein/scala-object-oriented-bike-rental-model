@@ -4,6 +4,7 @@ import java.time.{DayOfWeek, Duration, LocalDateTime}
 import java.time.LocalDateTime.now
 
 import ar.com.flow.bikerental.model.token.{ConsumedRentToken, ReservedRentToken}
+import ar.com.flow.bikerental.model.trip.completion.{TripCompletionRules, TripResult}
 
 trait BikeEvent {
   def user: User
@@ -19,7 +20,19 @@ case class BikePickUpEvent(bike: Bike, consumedToken: ConsumedRentToken) extends
 
 case class BikeDropOffEvent(user: User, bike: Bike, timestamp: LocalDateTime) extends BikeEvent
 
-case class Trip(pickUp: BikePickUpEvent)
+object Trip {
+  def apply(bike: Bike, consumedRentToken: ConsumedRentToken): Trip = {
+    Trip(bike, BikePickUpEvent(bike, consumedRentToken))
+  }
+}
+
+case class Trip(bike: Bike, pickUp: BikePickUpEvent) {
+  def finish(tripCompletionRules: TripCompletionRules): TripResult = {
+    val completedTrip = new FinishedTrip(this.pickUp, now)
+    val rulesCheckResult = tripCompletionRules.test(completedTrip)
+    TripResult(completedTrip, rulesCheckResult)
+  }
+}
 
 class FinishedTrip(var bikePickup: BikePickUpEvent, val dropOffTimestamp: LocalDateTime) {
   val user = bikePickup.user

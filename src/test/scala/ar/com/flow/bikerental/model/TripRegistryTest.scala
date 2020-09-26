@@ -1,6 +1,5 @@
 package ar.com.flow.bikerental.model
 
-import ar.com.flow.bikerental.model.trip.completion.SuccessResult
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
@@ -14,7 +13,7 @@ class TripRegistryTest extends AnyFunSuite with TestObjects with BeforeAndAfterE
   test("givenATripWhenFinishTripThenTheEventShouldBePresent") {
     val trip = tripRegistry.startTrip(bike1, reservedToken)
 
-    tripRegistry.finish(trip).isSuccess shouldBe true
+    tripRegistry.finishTrip(trip).isSuccess shouldBe true
   }
 
   test("givenABikeWhenFinishCurrentTripForBikeThenTheEventShouldBePresent") {
