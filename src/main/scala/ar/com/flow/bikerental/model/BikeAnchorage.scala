@@ -22,7 +22,7 @@ class BikeAnchorage(val trips: TripRegistry, bikeShop: BikeShop = new BikeShop()
     require(!token.owner.isBanned, "The user is banned.")
     releaseParkedBikeIf(parked => !bikeShop.maintenancePickupRequests.exists(_.bike == parked))
       .map(bike => trips.startTrip(bike, token))
-      .map(_.pickUp.bike)
+      .map(_.bike)
   }
 
   def releaseBike(token: BikeMaintenanceToken): Option[Bike] = {
