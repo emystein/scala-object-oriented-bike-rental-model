@@ -6,12 +6,12 @@ case class BikeStation(id: Option[String], anchorageCount: Int, trips: TripRegis
   val anchorages: IndexedSeq[BikeAnchorage] =
     (1 to anchorageCount).map(i => new BikeAnchorage(trips, bikeShop))
 
-  def freeSpots: Seq[BikeAnchorage] = anchorages.filter(_.parkedBike.isEmpty)
+  def freeAnchorages: Seq[BikeAnchorage] = anchorages.filter(_.parkedBike.isEmpty)
 
-  def occupiedSpots: Seq[BikeAnchorage] = anchorages diff freeSpots
+  def occupiedAnchorages: Seq[BikeAnchorage] = anchorages diff freeAnchorages
 
   def pickupAvailableBike(rentToken: ReservedRentToken): Option[Bike] =
-      occupiedSpots.headOption.flatMap(_.releaseBike(rentToken))
+      occupiedAnchorages.headOption.flatMap(_.releaseBike(rentToken))
 
   def getAnchorageById(anchorageId: Int): Option[BikeAnchorage] =
     anchorages.drop(anchorageId - 1).headOption

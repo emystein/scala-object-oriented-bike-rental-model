@@ -26,7 +26,7 @@ class BikeStationTest extends AnyWordSpec with TestObjects with BeforeAndAfterEa
         fillStationWithBikes(bikeStation)
         val rentToken = tokenRegistry.reserveTokenForUser(user)
         bikeStation.pickupAvailableBike(rentToken)
-        bikeStation.occupiedSpots should have size 1
+        bikeStation.occupiedAnchorages should have size 1
       }
     }
     "is asked for valid Anchorage by ID" should {
@@ -56,13 +56,13 @@ class BikeStationTest extends AnyWordSpec with TestObjects with BeforeAndAfterEa
     "is asked for parked Bikes" should {
       "return Empty" in {
         val bikeStation = BikeStation(Some("1"), anchorageCount = 2, tripRegistry, bikeShop)
-        bikeStation.occupiedSpots should be(Nil)
+        bikeStation.occupiedAnchorages should be(Nil)
       }
     }
-    "is asked for free spots" should {
+    "is asked for free Anchorages" should {
       "return all Anchorages" in {
         val bikeStation = BikeStation(Some("1"), anchorageCount = 2, tripRegistry, bikeShop)
-        bikeStation.freeSpots should have size 2
+        bikeStation.freeAnchorages should have size 2
       }
     }
     "a Bike is picked up" should {
@@ -80,7 +80,7 @@ class BikeStationTest extends AnyWordSpec with TestObjects with BeforeAndAfterEa
       "return occupied Anchorages" in {
         val bikeStation = BikeStation(Some("1"), anchorageCount = 2, tripRegistry, bikeShop)
         fillStationWithBikes(bikeStation)
-        bikeStation.occupiedSpots should have size 2
+        bikeStation.occupiedAnchorages should have size 2
       }
     }
     "a Bike is picked up using a used Token" should {
@@ -104,7 +104,7 @@ class BikeStationTest extends AnyWordSpec with TestObjects with BeforeAndAfterEa
       "return Empty" in {
         val bikeStation = BikeStation(Some("1"), anchorageCount = 2, tripRegistry, bikeShop)
         fillStationWithBikes(bikeStation)
-        bikeStation.freeSpots should be(Nil)
+        bikeStation.freeAnchorages should be(Nil)
       }
     }
     "pickup a Bike" should {

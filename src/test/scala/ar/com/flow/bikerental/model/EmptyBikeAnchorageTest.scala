@@ -17,7 +17,7 @@ class EmptyBikeAnchorageTest extends AnyWordSpec with TestObjects with BeforeAnd
     reservedRentToken1 = tokenRegistry.reserveTokenForUser(user)
     bikeShop = new BikeShop()
     station = BikeStation(Some("1"), anchorageCount = 1, tripRegistry, bikeShop)
-    anchorage = station.freeSpots.iterator.next
+    anchorage = station.freeAnchorages.iterator.next
   }
 
   "An empty Bike Anchorage" when {
