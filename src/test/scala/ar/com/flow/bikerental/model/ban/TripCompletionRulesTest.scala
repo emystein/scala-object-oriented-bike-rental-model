@@ -13,7 +13,6 @@ class TripCompletionRulesTest extends AnyFunSuite with TestObjects with BeforeAn
 
   override protected def beforeEach(): Unit = {
     tokenRegistry.clear()
-    tripRegistry.clear()
   }
 
   test("givenARentedBikeOnWeekdayWhenReturnTheBikeBefore1HourThenTheBanRulesShouldNotApply") {

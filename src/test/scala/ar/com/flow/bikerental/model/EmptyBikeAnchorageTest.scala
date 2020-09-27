@@ -14,7 +14,6 @@ class EmptyBikeAnchorageTest extends AnyWordSpec with TestObjects with BeforeAnd
 
   override protected def beforeEach(): Unit = {
     tokenRegistry.clear()
-    tripRegistry.clear()
     reservedRentToken1 = tokenRegistry.reserveTokenForUser(user)
     bikeShop = new BikeShop()
     station = BikeStation(Some("1"), anchorageCount = 1, tripRegistry, bikeShop)
@@ -46,8 +45,8 @@ class EmptyBikeAnchorageTest extends AnyWordSpec with TestObjects with BeforeAnd
         val trip = tripRegistry.getCurrentTripForBike(bike1)
 
         val completedTrip = completedBikeTrip.get.completedTrip
-        completedTrip.user shouldBe (reservedRentToken1.owner)
-        completedTrip.bike shouldBe (bike1)
+        completedTrip.user shouldBe reservedRentToken1.owner
+        completedTrip.bike shouldBe bike1
       }
       "execute post actions" in {
         anchorage.parkBike(bike1)

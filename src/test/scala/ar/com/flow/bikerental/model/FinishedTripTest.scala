@@ -13,7 +13,6 @@ class FinishedTripTest extends AnyWordSpec with TestObjects with BeforeAndAfterE
 
   override protected def beforeEach(): Unit = {
     tokenRegistry.clear()
-    tripRegistry.clear()
     bikePickUp = tripRegistry.startTrip(bike1, reservedToken).pickUp
   }
 

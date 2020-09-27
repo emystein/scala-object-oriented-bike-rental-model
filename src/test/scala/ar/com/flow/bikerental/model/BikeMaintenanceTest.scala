@@ -14,7 +14,6 @@ class BikeMaintenanceTest extends AnyWordSpec with TestObjects with BeforeAndAft
   private var reservedRentToken1: ReservedRentToken = null
 
   override protected def beforeEach(): Unit = {
-    tripRegistry.clear()
     reservedRentToken1 = tokenRegistry.reserveTokenForUser(user)
     bikeShop = new BikeShop()
     station = BikeStation(Some("1"), anchorageCount = 1, tripRegistry, bikeShop)

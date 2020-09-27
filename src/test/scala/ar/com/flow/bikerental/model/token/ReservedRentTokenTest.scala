@@ -10,7 +10,6 @@ import org.scalatest.matchers.should.Matchers
 class ReservedRentTokenTest extends AnyFunSuite with TestObjects with BeforeAndAfterEach with Matchers {
   override protected def beforeEach(): Unit = {
     tokenRegistry.clear()
-    tripRegistry.clear()
   }
 
   test("givenATransactionTokenWithExpirationDateInTheFutureWhenValidatingItThenItShouldBeValid") {

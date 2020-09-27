@@ -9,7 +9,6 @@ class BikeStationTest extends AnyFunSuite with TestObjects with BeforeAndAfterEa
 
   override protected def beforeEach(): Unit = {
     tokenRegistry.clear()
-    tripRegistry.clear()
     reservedToken = tokenRegistry.reserveTokenForUser(user)
     bikeShop = new BikeShop()
   }

@@ -15,7 +15,6 @@ class BikeAnchorageTest extends AnyFunSuite with TestObjects with BeforeAndAfter
 
   override protected def beforeEach(): Unit = {
     tokenRegistry.clear()
-    tripRegistry.clear()
     reservedRentToken1 = tokenRegistry.reserveTokenForUser(user)
     bikeShop = new BikeShop()
     station = BikeStation(Some("1"), anchorageCount = 1, tripRegistry, bikeShop)
