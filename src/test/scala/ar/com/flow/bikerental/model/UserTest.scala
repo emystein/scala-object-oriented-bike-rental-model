@@ -1,22 +1,28 @@
 package ar.com.flow.bikerental.model
 
-import org.scalatest.funsuite.AnyFunSuite
 import java.time.Period
 
 import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
-class UserTest extends AnyFunSuite with Matchers {
-    test("givenAnInitialStateWhenCreateAUserThenItShouldNotBeBanned") {
-        val user = User(Some(1), "Emiliano Menéndez")
+class UserTest extends AnyWordSpec with Matchers {
+  "User" when {
+     "is created" should {
+       "not be banned" in {
 
-        user.isBanned shouldBe false
-    }
+         val user = User(Some(1), "Emiliano Menéndez")
 
-    test("givenANotBannedUserWhenBanUserForTwoDaysThenUserShouldBeBannedForTwoDays") {
+         user.isBanned shouldBe false
+       }
+     }
+    "is banned" should {
+      "be banned" in {
         val user = User(Some(1), "Emiliano Menéndez")
 
         user.ban(Period.ofDays(2))
 
         user.ban.get.period shouldBe Period.ofDays(2)
+      }
     }
+  }
 }
