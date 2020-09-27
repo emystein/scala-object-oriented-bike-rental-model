@@ -14,6 +14,7 @@ trait BikeEvent {
 
 case class Trip(var bike: Bike, consumedRentToken: ConsumedRentToken) {
   bike.addTrip(this)
+
   val pickUp: LocalDateTime = now
 
   def finish(tripCompletionRules: TripCompletionRules): TripResult = {
