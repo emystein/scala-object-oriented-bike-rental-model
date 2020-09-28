@@ -9,7 +9,6 @@ class UserTest extends AnyWordSpec with Matchers {
   "User" when {
      "is created" should {
        "not be banned" in {
-
          val user = User(Some(1), "Emiliano Menéndez")
 
          user.isBanned shouldBe false

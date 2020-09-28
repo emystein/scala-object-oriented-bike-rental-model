@@ -14,21 +14,6 @@ class BikeStationTest extends AnyWordSpec with TestObjects with BeforeAndAfterEa
   }
 
   "Bike Station" when {
-    "is asked for Anchorages" should {
-      "return Anchorages" in {
-        val bikeStation = BikeStation(Some("1"), anchorageCount = 2, tripRegistry, bikeShop)
-        bikeStation.anchorages should have size 2
-      }
-    }
-    "a Bike is picked up" should {
-      "decrement occupied Anchorages" in {
-        val bikeStation = BikeStation(Some("1"), anchorageCount = 2, tripRegistry, bikeShop)
-        fillStationWithBikes(bikeStation)
-        val rentToken = tokenRegistry.reserveTokenForUser(user)
-        bikeStation.pickupAvailableBike(rentToken)
-        bikeStation.occupiedAnchorages should have size 1
-      }
-    }
     "is asked for valid Anchorage by ID" should {
       "return Anchorage" in {
         val bikeStation = BikeStation(Some("1"), anchorageCount = 2, tripRegistry, bikeShop)
@@ -52,23 +37,29 @@ class BikeStationTest extends AnyWordSpec with TestObjects with BeforeAndAfterEa
     }
   }
 
-  "Bike Station without parked Bikes" when {
-    "is asked for parked Bikes" should {
-      "return Empty" in {
+  "Bike Station with available Anchorages" when {
+    "is asked for available Anchorages" should {
+      "return all Anchorages" in {
         val bikeStation = BikeStation(Some("1"), anchorageCount = 2, tripRegistry, bikeShop)
+
+        bikeStation.availableAnchorages should have size 2
         bikeStation.occupiedAnchorages should be(Nil)
       }
     }
-    "is asked for free Anchorages" should {
-      "return all Anchorages" in {
+    "a Bike is parked" should {
+      "park bike" in {
         val bikeStation = BikeStation(Some("1"), anchorageCount = 2, tripRegistry, bikeShop)
-        bikeStation.freeAnchorages should have size 2
+
+        bikeStation.parkBikeOnAnchorage(bike1, anchoragePosition = 1)
+
+        bikeStation.occupiedAnchorages should have size 1
       }
     }
     "a Bike is picked up" should {
       "release the Bike" in {
         val bikeStation = BikeStation(Some("1"), anchorageCount = 1, tripRegistry, bikeShop)
         fillStationWithBikes(bikeStation)
+
         val bike = bikeStation.pickupAvailableBike(reservedToken)
         bike should be(defined)
       }
@@ -76,11 +67,15 @@ class BikeStationTest extends AnyWordSpec with TestObjects with BeforeAndAfterEa
   }
 
   "Bike Station with parked Bikes" when {
-    "is asked for occupied Anchorages" should {
-      "return occupied Anchorages" in {
+    "a Bike is picked up" should {
+      "decrement occupied Anchorages" in {
         val bikeStation = BikeStation(Some("1"), anchorageCount = 2, tripRegistry, bikeShop)
         fillStationWithBikes(bikeStation)
-        bikeStation.occupiedAnchorages should have size 2
+        val rentToken = tokenRegistry.reserveTokenForUser(user)
+
+        bikeStation.pickupAvailableBike(rentToken)
+
+        bikeStation.occupiedAnchorages should have size 1
       }
     }
     "a Bike is picked up using a used Token" should {
@@ -99,12 +94,14 @@ class BikeStationTest extends AnyWordSpec with TestObjects with BeforeAndAfterEa
     }
   }
 
-  "Bike Station full" when {
-    "is asked for free Anchorages" should {
+  "Bike Station with all Anchorages occupied" when {
+    "is asked for available Anchorages" should {
       "return Empty" in {
         val bikeStation = BikeStation(Some("1"), anchorageCount = 2, tripRegistry, bikeShop)
         fillStationWithBikes(bikeStation)
-        bikeStation.freeAnchorages should be(Nil)
+
+        bikeStation.availableAnchorages should be(Nil)
+        bikeStation.occupiedAnchorages should have size 2
       }
     }
     "pickup a Bike" should {
