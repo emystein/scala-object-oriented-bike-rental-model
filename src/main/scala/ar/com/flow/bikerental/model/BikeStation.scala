@@ -15,8 +15,8 @@ case class BikeStation(id: Option[String], anchorageCount: Int, trips: TripRegis
     occupiedAnchorages.headOption.flatMap(_.releaseBike(rentToken))
 
   def parkBikeOnAnchorage(bikeToPark: Bike, anchoragePosition: Int): Option[TripResult] =
-    getAnchorageById(anchoragePosition).flatMap(_.parkBike(bikeToPark))
+    anchorageAt(anchoragePosition).flatMap(_.parkBike(bikeToPark))
 
-  def getAnchorageById(anchorageId: Int): Option[BikeAnchorage] =
-    anchorages.drop(anchorageId - 1).headOption
+  def anchorageAt(anchoragePosition: Int): Option[BikeAnchorage] =
+    anchorages.drop(anchoragePosition - 1).headOption
 }
