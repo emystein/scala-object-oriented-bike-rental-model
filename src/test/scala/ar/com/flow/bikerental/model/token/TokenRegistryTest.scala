@@ -5,67 +5,75 @@ import java.time.Period
 
 import ar.com.flow.bikerental.model.TestObjects
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
-class TokenRegistryTest extends AnyFunSuite with TestObjects with BeforeAndAfterEach with Matchers {
+class TokenRegistryTest extends AnyWordSpec with TestObjects with BeforeAndAfterEach with Matchers {
   override protected def beforeEach(): Unit = {
     tokenRegistry.clear()
   }
 
-  test("givenATokenGeneratorWhenGeneratingANewTokenThenTheGeneratedTokenShouldBeValid") {
-    val token = tokenRegistry.generateTokenValidForPeriod(Period.ofDays(1), user)
-    token.value shouldNot be(null)
-    token.hasExpired shouldBe false
-    token.owner shouldBe user
-  }
+  "TokenRegistry" when {
+    "generate a new Token" should {
+      "generate a valid Token" in {
+        val token = tokenRegistry.generateTokenValidForPeriod(Period.ofDays(1), user)
 
-  test("givenARegistryWhenReservingATokenThenTheTokenShouldBePresent") {
-    val reservedToken = tokenRegistry.reserveTokenForUser(user)
-    reservedToken shouldNot be(null)
-  }
-
-  test("givenAnUserWhenReserveATokenThenTheTokenShouldBeAssociatedToTheUser") {
-    val token = tokenRegistry.reserveTokenForUser(user)
-    token.owner shouldBe user
-    tokenRegistry.tokensOf(user) should contain(token)
-  }
-
-  test("givenAnUserWhenReserveTwoTokensThenTheTokensShouldBeAssociatedToTheUser") {
-    val token1 = tokenRegistry.reserveTokenForUser(user)
-    val token2 = tokenRegistry.reserveTokenForUser(user)
-    tokenRegistry.tokensOf(user) should contain allOf (token1, token2)
-  }
-
-  test("givenAnUserWhenReserveATokenThenTheTokenShouldHaveReservedTimestamp") {
-    val token = tokenRegistry.reserveTokenForUser(user)
-    token.reservedAt shouldNot be(null)
-  }
-
-  test("givenAReservedTokenWhenConsumingTheTokenThenThereShouldNoBeErrors") {
-    val reservedToken = tokenRegistry.reserveTokenForUser(user)
-    tokenRegistry.consumeToken(reservedToken)
-  }
-
-  test("givenAReservedTokenWhenConsumeTheTokenThenTheTokenShouldHaveConsumedTimestamp") {
-    val reservedToken = tokenRegistry.reserveTokenForUser(user)
-    val consumedToken = tokenRegistry.consumeToken(reservedToken)
-    consumedToken.consumedAt shouldNot be(null)
-  }
-
-  test("givenAnExpiredTokenWhenConsumingTheTokenThenShouldOccurAnError") {
-    val expiredToken = tokenRegistry.reserveTokenForUser(user)
-    expiredToken.setExpiration(now.minusDays(1))
-    assertThrows[IllegalArgumentException] {
-      tokenRegistry.consumeToken(expiredToken)
+        token.value shouldNot be(null)
+        token.hasExpired shouldBe false
+        token.owner shouldBe user
+      }
     }
-  }
+    "reserve a Token" should {
+      "return reserved Token" in {
+        val reservedToken = tokenRegistry.reserveTokenForUser(user)
 
-  test("givenAReservedTokenWhenConsumingTheTokenForTheSecondTimeThenThereShouldOccurAnError") {
-    val reservedToken = tokenRegistry.reserveTokenForUser(user)
-    tokenRegistry.consumeToken(reservedToken)
-    assertThrows[IllegalArgumentException] {
-      tokenRegistry.consumeToken(reservedToken)
+        reservedToken shouldNot be(null)
+      }
+    }
+    "reserve a Token" should {
+      "associate the Token to the User" in {
+        val token = tokenRegistry.reserveTokenForUser(user)
+        token.owner shouldBe user
+        tokenRegistry.tokensOf(user) should contain(token)
+      }
+    }
+    "reserve two Tokens" should {
+      "associate the Tokens to the User" in {
+        val token1 = tokenRegistry.reserveTokenForUser(user)
+        val token2 = tokenRegistry.reserveTokenForUser(user)
+        tokenRegistry.tokensOf(user) should contain allOf(token1, token2)
+      }
+    }
+    "reserve a Token" should {
+      "set reservation timestamp" in {
+        val token = tokenRegistry.reserveTokenForUser(user)
+        token.reservedAt shouldNot be(null)
+      }
+    }
+    "consume a Token" should {
+      "set consumption timestamp" in {
+        val reservedToken = tokenRegistry.reserveTokenForUser(user)
+        val consumedToken = tokenRegistry.consumeToken(reservedToken)
+        consumedToken.consumedAt shouldNot be(null)
+      }
+    }
+    "consume an expired Token" should {
+      "throw an Exception" in {
+        val expiredToken = tokenRegistry.reserveTokenForUser(user)
+        expiredToken.setExpiration(now.minusDays(1))
+        assertThrows[IllegalArgumentException] {
+          tokenRegistry.consumeToken(expiredToken)
+        }
+      }
+    }
+    "consume a Token twice" should {
+      "throw an Exception" in {
+        val reservedToken = tokenRegistry.reserveTokenForUser(user)
+        tokenRegistry.consumeToken(reservedToken)
+        assertThrows[IllegalArgumentException] {
+          tokenRegistry.consumeToken(reservedToken)
+        }
+      }
     }
   }
 }
