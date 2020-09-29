@@ -4,10 +4,10 @@ import java.time.LocalDateTime
 
 import ar.com.flow.bikerental.model.{FinishedTrip, TestObjects}
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
-class TripCompletionRulesTest extends AnyFunSuite with TestObjects with BeforeAndAfterEach with Matchers {
+class TripCompletionRulesTest extends AnyWordSpec with TestObjects with BeforeAndAfterEach with Matchers {
   private val mondayAt10Am = LocalDateTime.of(2019, 12, 2, 10, 0)
   private val sundayAt10Am = LocalDateTime.of(2019, 12, 1, 10, 0)
 
@@ -15,39 +15,49 @@ class TripCompletionRulesTest extends AnyFunSuite with TestObjects with BeforeAn
     tokenRegistry.clear()
   }
 
-  test("givenARentedBikeOnWeekdayWhenReturnTheBikeBefore1HourThenTheBanRulesShouldNotApply") {
-    var bikePickup = tripRegistry.startTrip(bike1, reservedToken).pickUp
-    bikePickup = mondayAt10Am.minusMinutes(59)
+  "On a Weekday" when {
+    "a rented Bike is returned within 1 hour" should {
+      "not ban User" in {
+        var bikePickup = tripRegistry.startTrip(bike1, reservedToken).pickUp
+        bikePickup = mondayAt10Am.minusMinutes(59)
 
-    val result = tripCompletionRules.test(new FinishedTrip(user, bike1, bikePickup, bikeDropOff = mondayAt10Am))
+        val result = tripCompletionRules.test(new FinishedTrip(user, bike1, bikePickup, bikeDropOff = mondayAt10Am))
 
-    result.userIsBanned shouldBe false
+        result.userIsBanned shouldBe false
+      }
+    }
+    "a rented Bike is returned after 1 hour" should {
+      "ban User" in {
+        var bikePickup = tripRegistry.startTrip(bike1, reservedToken).pickUp
+        bikePickup = mondayAt10Am.minusHours(2)
+
+        val result = tripCompletionRules.test(new FinishedTrip(user, bike1, bikePickup, bikeDropOff = mondayAt10Am))
+
+        result.userIsBanned shouldBe true
+      }
+    }
   }
 
-  test("givenARentedBikeOnWeekdayWhenReturnTheBikeAfter1HourThenTheUserShouldGetBanned") {
-    var bikePickup = tripRegistry.startTrip(bike1, reservedToken).pickUp
-    bikePickup = mondayAt10Am.minusHours(2)
+  "During the Weekend" when {
+    "a rented Bike is returned within 2 hours" should {
+      "not ban User" in {
+        var bikePickup = tripRegistry.startTrip(bike1, reservedToken).pickUp
+        bikePickup = sundayAt10Am.minusMinutes(119)
 
-    val result = tripCompletionRules.test(new FinishedTrip(user, bike1, bikePickup, bikeDropOff = mondayAt10Am))
+        val result = tripCompletionRules.test(new FinishedTrip(user, bike1, bikePickup, bikeDropOff = sundayAt10Am))
 
-    result.userIsBanned shouldBe true
-  }
+        result.userIsBanned shouldBe false
+      }
+    }
+    "a rented Bike is returned after 2 hours" should {
+      "ban User" in {
+        var bikePickup = tripRegistry.startTrip(bike1, reservedToken).pickUp
+        bikePickup = sundayAt10Am.minusHours(3)
 
-  test("givenARentedBikeOnWeekendWhenReturnTheBikeBefore2HoursThenTheBanRulesShouldNotApply") {
-    var bikePickup = tripRegistry.startTrip(bike1, reservedToken).pickUp
-    bikePickup = sundayAt10Am.minusMinutes(119)
+        val result = tripCompletionRules.test(new FinishedTrip(user, bike1, bikePickup, bikeDropOff = sundayAt10Am))
 
-    val result = tripCompletionRules.test(new FinishedTrip(user, bike1, bikePickup, bikeDropOff = sundayAt10Am))
-
-    result.userIsBanned shouldBe false
-  }
-
-  test("givenARentedBikeOnWeekendWhenReturnTheBikeAfter2HoursThenTheUserShouldGetBanned") {
-    var bikePickup = tripRegistry.startTrip(bike1, reservedToken).pickUp
-    bikePickup = sundayAt10Am.minusHours(3)
-
-    val result = tripCompletionRules.test(new FinishedTrip(user, bike1, bikePickup, bikeDropOff = sundayAt10Am))
-
-    result.userIsBanned shouldBe true
+        result.userIsBanned shouldBe true
+      }
+    }
   }
 }

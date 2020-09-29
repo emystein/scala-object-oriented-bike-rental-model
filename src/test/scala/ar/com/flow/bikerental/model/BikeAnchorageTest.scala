@@ -4,7 +4,6 @@ import java.time.Period
 
 import ar.com.flow.bikerental.model.token.ReservedRentToken
 import org.scalatest.BeforeAndAfterEach
-import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -56,7 +55,7 @@ class BikeAnchorageTest extends AnyWordSpec with TestObjects with BeforeAndAfter
         }
       }
     }
-    "pickup a Bike using a used Token" should {
+    "pickup a Bike using an already used Token" should {
       "throw an Exception" in {
         anchorage.parkBike(bike1)
         anchorage.releaseBike(reservedRentToken1)

@@ -2,9 +2,8 @@ package ar.com.flow.bikerental.model.token
 
 import java.time.LocalDateTime.now
 import java.time.Period
-import java.util.Random
 
-import ar.com.flow.bikerental.model.{TestObjects, User}
+import ar.com.flow.bikerental.model.TestObjects
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers

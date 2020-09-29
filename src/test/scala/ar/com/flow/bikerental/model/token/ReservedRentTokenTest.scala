@@ -22,14 +22,6 @@ class ReservedRentTokenTest extends AnyFunSuite with TestObjects with BeforeAndA
     expiredToken.hasExpired shouldBe true
   }
 
-  test("equals") {
-    val token1 = new ReservedRentToken(value = "1", expiration = LocalDateTime.now.plusDays(1), owner = user)
-    val token2 = new ReservedRentToken(value = "2", expiration = LocalDateTime.now.plusDays(1), owner = user)
-
-    token1 shouldBe token1
-    token2 shouldNot be(token1)
-  }
-  
   test("givenAReservedTokenWhenConsumeThenAConsumedTokenShouldBeCreated") {
     val reservedToken = ReservedRentToken(expiration = LocalDateTime.now.plusDays(1), owner = user)
     val consumedToken = tokenRegistry.consumeToken(reservedToken)

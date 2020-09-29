@@ -1,11 +1,9 @@
 package ar.com.flow.bikerental.model
 
-import ar.com.flow.bikerental.model.token.{ReservedRentToken, TokenRegistry}
+import ar.com.flow.bikerental.model.token.ReservedRentToken
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-
-import scala.util.Random
 
 class BikeMaintenanceTest extends AnyWordSpec with TestObjects with BeforeAndAfterEach with Matchers {
   private var bikeShop: BikeShop = null
