@@ -4,74 +4,54 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
+trait BikeStationTestMethods {
+  this: BikeStation =>
+
+  def fillWithParkedBikes(): Unit = this.anchorages.foreach(_.parkBike(new Bike))
+}
+
 class BikeStationTest extends AnyWordSpec with TestObjects with BeforeAndAfterEach with Matchers {
   private var bikeShop: BikeShop = null
-  private var bikeStation: BikeStation = null
+  private var bikeStation: BikeStation with BikeStationTestMethods = null
 
   override protected def beforeEach(): Unit = {
     tokenRegistry.clear()
     reservedToken = tokenRegistry.reserveTokenForUser(user)
     bikeShop = new BikeShop()
-    bikeStation = BikeStation(Some("1"), anchorageCount = 2, tripRegistry, bikeShop)
-  }
-
-  "Bike Station" when {
-    "is asked for valid Anchorage by ID" should {
-      "return Anchorage" in {
-        bikeStation.anchorageAt(1) should be(defined)
-        bikeStation.anchorageAt(2) should be(defined)
-      }
-    }
-    "is asked for invalid Anchorage by ID" should {
-      "return first Anchorage" in {
-        bikeStation.anchorageAt(-1) shouldBe defined
-        bikeStation.anchorageAt(0) shouldBe defined
-      }
-    }
-    "is asked for Anchorage by ID greater than present" should {
-      "return None" in {
-        bikeStation.anchorageAt(3) shouldNot be(defined)
-      }
-    }
+    bikeStation = new BikeStation(Some("1"), anchorageCount = 2, tripRegistry, bikeShop) with BikeStationTestMethods
   }
 
   "Bike Station with available Anchorages" when {
-    "is asked for available Anchorages" should {
-      "return all available Anchorages" in {
-        bikeStation.availableAnchorages should have size 2
-        bikeStation.occupiedAnchorages should be(Nil)
-      }
-    }
     "a Bike is parked" should {
       "park Bike" in {
         bikeStation.parkBikeOnAnchorage(bike1, anchoragePosition = 1)
 
+        bikeStation.availableAnchorages should have size 1
         bikeStation.occupiedAnchorages should have size 1
       }
     }
   }
 
   "Bike Station with parked Bikes" when {
-    "a Bike is picked up" should {
+    "a parked Bike is picked up" should {
       "release the Bike" in {
-        fillStationWithBikes(bikeStation)
-        val rentToken = tokenRegistry.reserveTokenForUser(user)
+        bikeStation.fillWithParkedBikes()
 
-        bikeStation.pickupAvailableBike(rentToken) should be(defined)
-        bikeStation.occupiedAnchorages should have size 1
+        bikeStation.pickupAvailableBike(reservedToken) should be(defined)
+
+        bikeStation.availableAnchorages should have size 1
       }
     }
-    "a Bike is picked up using a used Token" should {
-      "not release the Bike" in {
-        fillStationWithBikes(bikeStation)
+    "a parked Bike is picked up using a used Token" should {
+      "retain the Bike" in {
+        bikeStation.fillWithParkedBikes()
 
-        // use valid rent token for the first time
-        var bike = bikeStation.pickupAvailableBike(reservedToken)
-        bike should be(defined)
+        bikeStation.pickupAvailableBike(reservedToken)
 
         // try to use valid rent token for the second time
-        bike = bikeStation.pickupAvailableBike(reservedToken)
-        bike shouldNot be(defined)
+        assertThrows[IllegalArgumentException] {
+          bikeStation.pickupAvailableBike(reservedToken)
+        }
       }
     }
   }
@@ -79,7 +59,7 @@ class BikeStationTest extends AnyWordSpec with TestObjects with BeforeAndAfterEa
   "Bike Station with all Anchorages occupied" when {
     "is asked for available Anchorages" should {
       "return Empty" in {
-        fillStationWithBikes(bikeStation)
+        bikeStation.fillWithParkedBikes()
 
         bikeStation.availableAnchorages should be(Nil)
         bikeStation.occupiedAnchorages should have size 2
@@ -93,6 +73,4 @@ class BikeStationTest extends AnyWordSpec with TestObjects with BeforeAndAfterEa
       }
     }
   }
-
-  private def fillStationWithBikes(bikeStation: BikeStation): Unit = bikeStation.anchorages.foreach(_.parkBike(new Bike))
 }
