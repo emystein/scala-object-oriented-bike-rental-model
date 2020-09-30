@@ -20,7 +20,7 @@ class UserTest extends AnyWordSpec with Matchers {
 
         user.ban(Period.ofDays(2))
 
-        user.ban.get.period shouldBe Period.ofDays(2)
+        user.ban.get.banPeriod shouldBe Period.ofDays(2)
       }
     }
   }

@@ -1,4 +1,4 @@
-package ar.com.flow.bikerental.model.ban
+package ar.com.flow.bikerental.model.trip.completion
 
 import java.time.LocalDateTime
 

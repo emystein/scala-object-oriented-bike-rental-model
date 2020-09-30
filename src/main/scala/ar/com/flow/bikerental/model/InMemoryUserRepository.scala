@@ -1,7 +1,5 @@
 package ar.com.flow.bikerental.model
 
-import java.util.UUID
-
 import scala.collection.mutable
 
 class InMemoryUserRepository extends UserRepository {
