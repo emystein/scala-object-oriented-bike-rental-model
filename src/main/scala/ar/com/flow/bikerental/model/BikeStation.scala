@@ -2,6 +2,9 @@ package ar.com.flow.bikerental.model
 
 import ar.com.flow.bikerental.model.token.ReservedRentToken
 import ar.com.flow.bikerental.model.trip.completion.TripResult
+import java.util.UUID
+
+import scala.collection.mutable
 
 case class BikeStation(id: Option[String], anchorageCount: Int, trips: TripRegistry, bikeShop: BikeShop) {
   val anchorages: IndexedSeq[BikeAnchorage] =
@@ -19,4 +22,24 @@ case class BikeStation(id: Option[String], anchorageCount: Int, trips: TripRegis
 
   def anchorageAt(anchoragePosition: Int): Option[BikeAnchorage] =
     anchorages.drop(anchoragePosition - 1).headOption
+}
+
+trait BikeStationRepository {
+  def save(bikeStation: BikeStation): BikeStation
+
+  def getById(stationId: String): Option[BikeStation]
+}
+
+class InMemoryBikeStationRepository extends BikeStationRepository {
+  val stationsById: mutable.Map[String, BikeStation] = new mutable.HashMap()
+
+  override def save(bikeStation: BikeStation): BikeStation = {
+    val saveBikeStation = bikeStation.copy(id = Some(bikeStation.id.getOrElse(UUID.randomUUID().toString)))
+
+    stationsById.put(saveBikeStation.id.get, saveBikeStation)
+
+    saveBikeStation
+  }
+
+  override def getById(stationId: String): Option[BikeStation] = stationsById.get(stationId)
 }
