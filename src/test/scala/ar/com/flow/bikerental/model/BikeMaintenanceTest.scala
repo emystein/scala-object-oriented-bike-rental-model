@@ -18,51 +18,6 @@ class BikeMaintenanceTest extends AnyWordSpec with TestObjects with BeforeAndAft
     anchorage = station.availableAnchorages.iterator.next
   }
 
-  "Anchorage with parked bike" when {
-    "request bike maintenance" should {
-      "inform bike shop that bike needs maintenance" in {
-        anchorage.parkBike(bike1)
-
-        anchorage.requestBikeMaintenance()
-
-        bikeShop.hasBikeInMaintenance(bike1) shouldBe true
-      }
-      "reject bike pickup for trip" in {
-        anchorage.parkBike(bike1)
-
-        anchorage.requestBikeMaintenance()
-
-        anchorage.releaseBike(reservedRentToken1) shouldBe None
-      }
-    }
-  }
-  "Anchorage with parked bike and Maintenance Token for parked bike" when {
-    "pickup bike for maintenance" should {
-      "release the bike" in {
-        anchorage.parkBike(bike1)
-        bikeShop.requestMaintenance(bike1)
-
-        val bike = pickupBikeForMaintenance(bike1)
-
-        bike shouldBe Some(bike1)
-        anchorage.parkedBike shouldBe None
-      }
-    }
-  }
-  "Anchorage with parked bike and Maintenance Token for a different bike" when {
-    "pickup bike for maintenance" should {
-      "not release the bike" in {
-        anchorage.parkBike(bike1)
-
-        bikeShop.requestMaintenance(bike1)
-
-        val bike = pickupBikeForMaintenance(bike2)
-
-        bike shouldBe None
-        anchorage.parkedBike shouldBe Some(bike1)
-      }
-    }
-  }
   "Bike Shop with active maintenance requests" when {
     "request next maintenance pickup token" should {
       "deliver token" in {
@@ -70,19 +25,16 @@ class BikeMaintenanceTest extends AnyWordSpec with TestObjects with BeforeAndAft
 
         bikeShop.nextMaintenancePickupToken shouldBe Some(BikeMaintenanceToken(bike1))
 
-        bikeShop.maintenancePickupRequests shouldBe empty
+        bikeShop.maintenanceRequests shouldBe empty
       }
     }
   }
+
   "Bike Shop without active maintenance requests" when {
     "request next maintenance pickup token" should {
       "deliver none" in {
         bikeShop.nextMaintenancePickupToken shouldBe None
       }
     }
-  }
-
-  private def pickupBikeForMaintenance(bikeToPickup: Bike): Option[Bike] = {
-    bikeShop.nextMaintenancePickupToken.filter(_.bike == bikeToPickup).flatMap(anchorage.releaseBike(_))
   }
 }

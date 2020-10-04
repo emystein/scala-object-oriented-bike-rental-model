@@ -5,21 +5,21 @@ import java.time.LocalDateTime
 import ar.com.flow.bikerental.model.token.Token
 
 class BikeShop {
-  var maintenancePickupRequests: List[BikeMaintenanceRequest] = Nil
+  var maintenanceRequests: List[BikeMaintenanceRequest] = Nil
 
   var maintenanceRequestsProcessed: List[BikeMaintenanceRequest] = Nil
 
   def requestMaintenance(bike: Bike): BikeMaintenanceRequest = {
-    maintenancePickupRequests = BikeMaintenanceRequest(bike) :: maintenancePickupRequests
-    maintenancePickupRequests.head
+    maintenanceRequests = BikeMaintenanceRequest(bike) :: maintenanceRequests
+    maintenanceRequests.head
   }
 
-  def hasBikeInMaintenance(bike: Bike) = maintenancePickupRequests.contains(BikeMaintenanceRequest(bike))
+  def hasBikeInMaintenance(bike: Bike) = maintenanceRequests.contains(BikeMaintenanceRequest(bike))
 
   def nextMaintenancePickupToken() : Option[BikeMaintenanceToken] = {
-    maintenancePickupRequests.headOption.map{ request =>
+    maintenanceRequests.headOption.map{ request =>
       maintenanceRequestsProcessed = maintenanceRequestsProcessed :+ request
-      maintenancePickupRequests = maintenancePickupRequests.tail
+      maintenanceRequests = maintenanceRequests.tail
       BikeMaintenanceToken(request.bike)
     }
   }
