@@ -14,6 +14,8 @@ class BikeShop {
     maintenancePickupRequests.head
   }
 
+  def hasBikeInMaintenance(bike: Bike) = maintenancePickupRequests.contains(BikeMaintenanceRequest(bike))
+
   def nextMaintenancePickupToken() : Option[BikeMaintenanceToken] = {
     maintenancePickupRequests.headOption.map{ request =>
       maintenanceRequestsProcessed = maintenanceRequestsProcessed :+ request

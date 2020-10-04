@@ -22,12 +22,16 @@ class BikeMaintenanceTest extends AnyWordSpec with TestObjects with BeforeAndAft
     "request bike maintenance" should {
       "inform bike shop that bike needs maintenance" in {
         anchorage.parkBike(bike1)
+
         anchorage.requestBikeMaintenance()
-        bikeShop.maintenancePickupRequests should contain(BikeMaintenanceRequest(bike1))
+
+        bikeShop.hasBikeInMaintenance(bike1) shouldBe true
       }
       "reject bike pickup for trip" in {
         anchorage.parkBike(bike1)
+
         anchorage.requestBikeMaintenance()
+
         anchorage.releaseBike(reservedRentToken1) shouldBe None
       }
     }
@@ -37,7 +41,9 @@ class BikeMaintenanceTest extends AnyWordSpec with TestObjects with BeforeAndAft
       "release the bike" in {
         anchorage.parkBike(bike1)
         bikeShop.requestMaintenance(bike1)
+
         val bike = pickupBikeForMaintenance(bike1)
+
         bike shouldBe Some(bike1)
         anchorage.parkedBike shouldBe None
       }
@@ -47,8 +53,11 @@ class BikeMaintenanceTest extends AnyWordSpec with TestObjects with BeforeAndAft
     "pickup bike for maintenance" should {
       "not release the bike" in {
         anchorage.parkBike(bike1)
+
         bikeShop.requestMaintenance(bike1)
+
         val bike = pickupBikeForMaintenance(bike2)
+
         bike shouldBe None
         anchorage.parkedBike shouldBe Some(bike1)
       }
@@ -60,6 +69,7 @@ class BikeMaintenanceTest extends AnyWordSpec with TestObjects with BeforeAndAft
         bikeShop.requestMaintenance(bike1)
 
         bikeShop.nextMaintenancePickupToken shouldBe Some(BikeMaintenanceToken(bike1))
+
         bikeShop.maintenancePickupRequests shouldBe empty
       }
     }
