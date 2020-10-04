@@ -6,6 +6,7 @@ import java.util.UUID
 
 import scala.collection.mutable
 
+// a BikeStation not persisted yet has no ID
 case class BikeStation(id: Option[String], anchorageCount: Int, trips: TripRegistry, bikeShop: BikeShop) {
   val anchorages: IndexedSeq[BikeAnchorage] =
     (1 to anchorageCount).map(i => new BikeAnchorage(trips, bikeShop))

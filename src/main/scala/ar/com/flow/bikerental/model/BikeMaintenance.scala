@@ -5,27 +5,24 @@ import java.time.LocalDateTime
 import ar.com.flow.bikerental.model.token.Token
 
 class BikeShop {
-  var maintenanceRequests: List[BikeMaintenanceRequest] = Nil
+  var maintenanceRequests: List[Bike] = Nil
 
-  var maintenanceRequestsProcessed: List[BikeMaintenanceRequest] = Nil
+  var maintenanceRequestsProcessed: List[Bike] = Nil
 
-  def requestMaintenance(bike: Bike): BikeMaintenanceRequest = {
-    maintenanceRequests = BikeMaintenanceRequest(bike) :: maintenanceRequests
-    maintenanceRequests.head
+  def requestMaintenance(bike: Bike): Unit = {
+    maintenanceRequests = bike :: maintenanceRequests
   }
 
-  def hasBikeInMaintenance(bike: Bike) = maintenanceRequests.contains(BikeMaintenanceRequest(bike))
+  def hasBikeInMaintenance(bike: Bike) = maintenanceRequests.contains(bike)
 
   def nextMaintenancePickupToken() : Option[BikeMaintenanceToken] = {
-    maintenanceRequests.headOption.map{ request =>
-      maintenanceRequestsProcessed = maintenanceRequestsProcessed :+ request
+    maintenanceRequests.headOption.map{ bike =>
+      maintenanceRequestsProcessed = maintenanceRequestsProcessed :+ bike
       maintenanceRequests = maintenanceRequests.tail
-      BikeMaintenanceToken(request.bike)
+      BikeMaintenanceToken(bike)
     }
   }
 }
-
-case class BikeMaintenanceRequest(bike: Bike)
 
 case class BikeMaintenanceToken(bike: Bike) extends Token {
   override var expiration: LocalDateTime = LocalDateTime.now().plusWeeks(1)

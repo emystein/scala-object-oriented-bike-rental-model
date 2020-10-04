@@ -20,7 +20,7 @@ class BikeAnchorage(val trips: TripRegistry, bikeShop: BikeShop = new BikeShop()
 
   def releaseBike(token: ReservedRentToken): Option[Bike] = {
     require(!token.owner.isBanned, "The user is banned.")
-    releaseParkedBikeIf(parked => !bikeShop.maintenanceRequests.exists(_.bike == parked))
+    releaseParkedBikeIf(parked => !bikeShop.maintenanceRequests.exists(_ == parked))
       .map(bike => trips.startTrip(bike, token))
       .map(_.bike)
   }
@@ -29,7 +29,7 @@ class BikeAnchorage(val trips: TripRegistry, bikeShop: BikeShop = new BikeShop()
     releaseParkedBikeIf(parked => parked == token.bike)
   }
 
-  def requestBikeMaintenance(): Option[BikeMaintenanceRequest] =
+  def requestBikeMaintenance(): Unit =
     parkedBike.map(bike => bikeShop.requestMaintenance(bike))
 
   private def releaseParkedBikeIf(filter: Bike => Boolean = _ => true): Option[Bike] = {
