@@ -19,8 +19,8 @@ class BikeMaintenanceTest extends AnyWordSpec with TestObjects with BeforeAndAft
   }
 
   "Bike Shop with active maintenance requests" when {
-    "request next maintenance pickup token" should {
-      "deliver token" in {
+    "request next maintenance Pickup Token" should {
+      "deliver Pickup Token" in {
         bikeShop.requestMaintenance(bike1)
 
         bikeShop.nextMaintenancePickupToken shouldBe Some(BikeMaintenanceToken(bike1))
@@ -31,8 +31,8 @@ class BikeMaintenanceTest extends AnyWordSpec with TestObjects with BeforeAndAft
   }
 
   "Bike Shop without active maintenance requests" when {
-    "request next maintenance pickup token" should {
-      "deliver none" in {
+    "request next maintenance Pickup Token" should {
+      "deliver None" in {
         bikeShop.nextMaintenancePickupToken shouldBe None
       }
     }

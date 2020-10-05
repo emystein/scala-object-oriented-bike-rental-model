@@ -13,7 +13,7 @@ class BikeShop {
     maintenanceRequests = bike :: maintenanceRequests
   }
 
-  def hasBikeInMaintenance(bike: Bike) = maintenanceRequests.contains(bike)
+  def hasBikeInMaintenance(bike: Bike): Boolean = maintenanceRequests.contains(bike)
 
   def nextMaintenancePickupToken() : Option[BikeMaintenanceToken] = {
     maintenanceRequests.headOption.map{ bike =>
