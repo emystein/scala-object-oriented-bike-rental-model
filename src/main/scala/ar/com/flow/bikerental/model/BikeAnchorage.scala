@@ -3,7 +3,7 @@ package ar.com.flow.bikerental.model
 import ar.com.flow.bikerental.model.token.ReservedRentToken
 import ar.com.flow.bikerental.model.trip.completion.TripResult
 
-class BikeAnchorage(val trips: TripRegistry, bikeShop: BikeShop = new BikeShop()) {
+class BikeAnchorage(station: BikeStation, val trips: TripRegistry, bikeShop: BikeShop) {
   var parkedBike: Option[Bike] = None
 
   def isLocked = parkedBike.isDefined
@@ -30,7 +30,7 @@ class BikeAnchorage(val trips: TripRegistry, bikeShop: BikeShop = new BikeShop()
   }
 
   def requestBikeMaintenance(): Unit =
-    parkedBike.map(bike => bikeShop.requestMaintenance(bike))
+    parkedBike.map(bike => bikeShop.requestMaintenance(bike, station))
 
   private def releaseParkedBikeIf(filter: Bike => Boolean = _ => true): Option[Bike] = {
     val releasedBike = parkedBike.filter(filter)

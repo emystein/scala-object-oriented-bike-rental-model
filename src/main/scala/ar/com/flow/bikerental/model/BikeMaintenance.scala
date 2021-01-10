@@ -1,16 +1,17 @@
 package ar.com.flow.bikerental.model
 
-import java.time.LocalDateTime
-
 import ar.com.flow.bikerental.model.token.Token
 
-class BikeShop {
+import java.time.LocalDateTime
+
+class BikeShop(gps: BikeGps) {
   var maintenanceRequests: List[Bike] = Nil
 
   var maintenanceRequestsProcessed: List[Bike] = Nil
 
-  def requestMaintenance(bike: Bike): Unit = {
+  def requestMaintenance(bike: Bike, station: BikeStation): Unit = {
     maintenanceRequests = bike :: maintenanceRequests
+    gps.informLocation(bike, station)
   }
 
   def hasBikeInMaintenance(bike: Bike): Boolean = maintenanceRequests.contains(bike)
