@@ -24,6 +24,11 @@ class BikeStationTest extends AnyWordSpec with TestObjects with BeforeAndAfterEa
   }
 
   "Bike Station with available Anchorages" when {
+    "ask for available Anchorage" should {
+      "return first available" in {
+        bikeStation.firstAvailableAnchorage shouldBe defined
+      }
+    }
     "a Bike is parked" should {
       "park Bike" in {
         bikeStation.parkBikeOnAnchorage(bike1, anchoragePosition = 1)
@@ -59,12 +64,13 @@ class BikeStationTest extends AnyWordSpec with TestObjects with BeforeAndAfterEa
   }
 
   "Bike Station with all Anchorages occupied" when {
-    "is asked for available Anchorages" should {
+    "ask for available Anchorages" should {
       "return Empty" in {
         bikeStation.fillWithParkedBikes()
 
         bikeStation.availableAnchorages should be(Nil)
         bikeStation.occupiedAnchorages should have size 2
+        bikeStation.firstAvailableAnchorage shouldBe None
       }
     }
     "pickup a Bike" should {

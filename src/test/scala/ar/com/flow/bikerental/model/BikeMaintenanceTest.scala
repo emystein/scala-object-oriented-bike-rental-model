@@ -17,7 +17,7 @@ class BikeMaintenanceTest extends AnyWordSpec with TestObjects with BeforeAndAft
     gps = BikeGps()
     bikeShop = new BikeShop(gps)
     station = BikeStation(Some("1"), anchorageCount = 1, tripRegistry, bikeShop, gps)
-    anchorage = station.availableAnchorages.iterator.next
+    anchorage = station.firstAvailableAnchorage.get
     anchorage.parkBike(bike1)
   }
 
