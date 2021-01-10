@@ -11,18 +11,6 @@ trait BikeStationTestMethods {
 }
 
 class BikeStationTest extends AnyWordSpec with TestObjects with BeforeAndAfterEach with Matchers {
-  private var bikeShop: BikeShop = null
-  private var gps: BikeGps = null
-  private var bikeStation: BikeStation with BikeStationTestMethods = null
-
-  override protected def beforeEach(): Unit = {
-    tokenRegistry.clear()
-    reservedToken = tokenRegistry.reserveTokenForUser(user)
-    gps = BikeGps()
-    bikeShop = new BikeShop(gps)
-    bikeStation = new BikeStation(Some("1"), anchorageCount = 2, tripRegistry, bikeShop, gps) with BikeStationTestMethods
-  }
-
   "Bike Station with available Anchorages" when {
     "ask for available Anchorage" should {
       "return first available" in {

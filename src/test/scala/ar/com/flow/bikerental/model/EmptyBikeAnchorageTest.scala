@@ -1,27 +1,11 @@
 package ar.com.flow.bikerental.model
 
-import ar.com.flow.bikerental.model.token.ReservedRentToken
 import ar.com.flow.bikerental.model.trip.completion.SuccessResult
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
 class EmptyBikeAnchorageTest extends AnyWordSpec with TestObjects with BeforeAndAfterEach with Matchers {
-  private var bikeShop: BikeShop = null
-  private var gps: BikeGps = null
-  private var station: BikeStation = null
-  private var anchorage: BikeAnchorage = null
-  private var reservedRentToken1: ReservedRentToken = null
-
-  override protected def beforeEach(): Unit = {
-    tokenRegistry.clear()
-    reservedRentToken1 = tokenRegistry.reserveTokenForUser(user)
-    gps = BikeGps()
-    bikeShop = new BikeShop(gps)
-    station = BikeStation(Some("1"), anchorageCount = 1, tripRegistry, bikeShop, gps)
-    anchorage = station.availableAnchorages.iterator.next
-  }
-
   "An empty Bike Anchorage" when {
     "ask for bike" should {
       "return None" in {

@@ -1,11 +1,11 @@
 package ar.com.flow.bikerental.model.trip.completion
 
-import java.time.LocalDateTime
-
 import ar.com.flow.bikerental.model.{FinishedTrip, TestObjects}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
+
+import java.time.LocalDateTime
 
 class TripCompletionRulesTest extends AnyWordSpec with TestObjects with BeforeAndAfterEach with Matchers {
   private val mondayAt10Am = LocalDateTime.of(2019, 12, 2, 10, 0)

@@ -1,23 +1,12 @@
 package ar.com.flow.bikerental.model
 
-import ar.com.flow.bikerental.model.token.ReservedRentToken
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
 class BikeMaintenanceTest extends AnyWordSpec with TestObjects with BeforeAndAfterEach with Matchers {
-  private var bikeShop: BikeShop = null
-  private var station: BikeStation = null
-  private var anchorage: BikeAnchorage = null
-  private var reservedRentToken1: ReservedRentToken = null
-  private var gps: BikeGps = null
-
   override protected def beforeEach(): Unit = {
-    reservedRentToken1 = tokenRegistry.reserveTokenForUser(user)
-    gps = BikeGps()
-    bikeShop = new BikeShop(gps)
-    station = BikeStation(Some("1"), anchorageCount = 1, tripRegistry, bikeShop, gps)
-    anchorage = station.firstAvailableAnchorage.get
+    super.beforeEach()
     anchorage.parkBike(bike1)
   }
 
@@ -31,7 +20,7 @@ class BikeMaintenanceTest extends AnyWordSpec with TestObjects with BeforeAndAft
       "inform bike location" in {
         anchorage.requestBikeMaintenance()
 
-        gps.bikeLocation(bike1) shouldBe Some(station)
+        gps.bikeLocation(bike1) shouldBe Some(bikeStation)
       }
       "reject Bike Pickup for Trip" in {
         anchorage.requestBikeMaintenance()
@@ -62,7 +51,7 @@ class BikeMaintenanceTest extends AnyWordSpec with TestObjects with BeforeAndAft
   "Bike Shop with active maintenance requests" when {
     "request next maintenance Pickup Token" should {
       "deliver Pickup Token" in {
-        bikeShop.requestMaintenance(bike1, station)
+        bikeShop.requestMaintenance(bike1, bikeStation)
 
         bikeShop.nextMaintenancePickupToken shouldBe Some(BikeMaintenanceToken(bike1))
 

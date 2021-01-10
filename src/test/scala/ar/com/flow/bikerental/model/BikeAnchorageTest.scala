@@ -1,29 +1,12 @@
 package ar.com.flow.bikerental.model
 
-import java.time.Period
-
-import ar.com.flow.bikerental.model.token.ReservedRentToken
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
+import java.time.Period
+
 class BikeAnchorageTest extends AnyWordSpec with TestObjects with BeforeAndAfterEach with Matchers {
-  private var bikeShop: BikeShop = null
-  private var station: BikeStation = null
-  private var anchorage: BikeAnchorage = null
-  private var reservedRentToken1: ReservedRentToken = null
-  private var gps: BikeGps = null
-
-  override protected def beforeEach(): Unit = {
-    reservedRentToken1 = tokenRegistry.reserveTokenForUser(user)
-    gps = BikeGps()
-    bikeShop = new BikeShop(gps)
-    station = BikeStation(Some("1"), anchorageCount = 1, tripRegistry, bikeShop, gps)
-    anchorage = station.availableAnchorages.iterator.next
-    tokenRegistry.clear()
-    reservedRentToken1 = tokenRegistry.reserveTokenForUser(user)
-  }
-
   "Available Bike Anchorage" when {
     "park a Bike" should {
       "receive the Bike" in {

@@ -1,9 +1,9 @@
 package ar.com.flow.bikerental.model
 
-import java.time.Period
-
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
+
+import java.time.Period
 
 class UserTest extends AnyWordSpec with Matchers {
   "User" when {

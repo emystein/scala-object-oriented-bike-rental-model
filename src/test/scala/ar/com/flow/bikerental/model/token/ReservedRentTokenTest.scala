@@ -1,11 +1,11 @@
 package ar.com.flow.bikerental.model.token
 
-import java.time.LocalDateTime
-
 import ar.com.flow.bikerental.model.TestObjects
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
+
+import java.time.LocalDateTime
 
 class ReservedRentTokenTest extends AnyWordSpec with TestObjects with BeforeAndAfterEach with Matchers {
   override protected def beforeEach(): Unit = {

@@ -1,11 +1,11 @@
 package ar.com.flow.bikerental.model
 
-import java.time.LocalDateTime.now
-import java.time.{Duration, LocalDateTime}
-
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
+
+import java.time.LocalDateTime.now
+import java.time.{Duration, LocalDateTime}
 
 class FinishedTripTest extends AnyWordSpec with TestObjects with BeforeAndAfterEach with Matchers {
   private var bikePickUp: LocalDateTime = null
