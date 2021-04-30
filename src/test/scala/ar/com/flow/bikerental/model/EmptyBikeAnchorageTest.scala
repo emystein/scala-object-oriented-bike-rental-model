@@ -14,14 +14,14 @@ class EmptyBikeAnchorageTest extends AnyWordSpec with TestObjects with BeforeAnd
     }
     "ask if it is locked" should {
       "return False" in {
-        anchorage.isLocked shouldBe false
+        anchorage.hasParkedBike shouldBe false
       }
     }
     "park a bike" should {
       "lock" in {
         anchorage.parkBike(bike1)
 
-        anchorage.isLocked shouldBe true
+        anchorage.hasParkedBike shouldBe true
       }
       "complete the trip" in {
         anchorage.parkBike(bike1)

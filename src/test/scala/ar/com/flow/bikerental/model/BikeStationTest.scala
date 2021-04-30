@@ -1,28 +1,20 @@
 package ar.com.flow.bikerental.model
 
-import org.scalatest.BeforeAndAfterEach
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec.AnyWordSpec
-
 trait BikeStationTestMethods {
   this: BikeStation =>
 
   def fillWithParkedBikes(): Unit = this.anchorages.foreach(_.parkBike(new Bike))
 }
 
-class BikeStationTest extends AnyWordSpec with TestObjects with BeforeAndAfterEach with Matchers {
+class BikeStationTest extends BaseSpec {
   "Bike Station with available Anchorages" when {
-    "ask for available Anchorage" should {
-      "return first available" in {
-        bikeStation.firstAvailableAnchorage shouldBe defined
-      }
-    }
     "a Bike is parked" should {
       "park Bike" in {
-        bikeStation.parkBikeOnAnchorage(bike1, anchoragePosition = 1)
+        val positionToParkBike = 1
 
-        bikeStation.availableAnchorages should have size 1
-        bikeStation.occupiedAnchorages should have size 1
+        bikeStation.parkBikeOnAnchorage(bike1, positionToParkBike)
+
+        bikeStation.isAnchorageAvailable(positionToParkBike) shouldBe false
       }
     }
   }
@@ -32,7 +24,7 @@ class BikeStationTest extends AnyWordSpec with TestObjects with BeforeAndAfterEa
       "release the Bike" in {
         bikeStation.fillWithParkedBikes()
 
-        bikeStation.pickupAvailableBike(reservedToken) should be(defined)
+        bikeStation.pickupAvailableBike(reservedToken) shouldBe defined
 
         bikeStation.availableAnchorages should have size 1
       }
@@ -58,7 +50,6 @@ class BikeStationTest extends AnyWordSpec with TestObjects with BeforeAndAfterEa
 
         bikeStation.availableAnchorages should be(Nil)
         bikeStation.occupiedAnchorages should have size 2
-        bikeStation.firstAvailableAnchorage shouldBe None
       }
     }
     "pickup a Bike" should {

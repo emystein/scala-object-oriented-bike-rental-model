@@ -11,8 +11,6 @@ case class BikeStation(id: Option[String], anchorageCount: Int, trips: TripRegis
   val anchorages: IndexedSeq[BikeAnchorage] =
     (1 to anchorageCount).map(i => new BikeAnchorage(this, trips, bikeShop))
 
-  def firstAvailableAnchorage: Option[BikeAnchorage] = availableAnchorages.headOption
-
   def availableAnchorages: Seq[BikeAnchorage] = anchorages.filter(_.parkedBike.isEmpty)
 
   def occupiedAnchorages: Seq[BikeAnchorage] = anchorages diff availableAnchorages
@@ -23,8 +21,10 @@ case class BikeStation(id: Option[String], anchorageCount: Int, trips: TripRegis
   def parkBikeOnAnchorage(bikeToPark: Bike, anchoragePosition: Int): Option[TripResult] =
     anchorageAt(anchoragePosition).flatMap(_.parkBike(bikeToPark))
 
-  def anchorageAt(anchoragePosition: Int): Option[BikeAnchorage] =
-    anchorages.drop(anchoragePosition - 1).headOption
+  def anchorageAt(position: Int): Option[BikeAnchorage] =
+    anchorages.drop(position - 1).headOption
+
+  def isAnchorageAvailable(position: Int): Boolean = anchorageAt(position).get.isAvailable
 }
 
 trait BikeStationRepository {

@@ -6,7 +6,9 @@ import ar.com.flow.bikerental.model.trip.completion.TripResult
 class BikeAnchorage(station: BikeStation, val trips: TripRegistry, bikeShop: BikeShop) {
   var parkedBike: Option[Bike] = None
 
-  def isLocked = parkedBike.isDefined
+  def isAvailable = !hasParkedBike
+
+  def hasParkedBike = parkedBike.isDefined
 
   /**
    * @throws IllegalStateException if there is a previously parked Bike.
